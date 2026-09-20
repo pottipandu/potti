@@ -1,8 +1,13 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Private Gallery</title>
 
@@ -14,103 +19,163 @@
 
 <body>
 
-  <!-- PIN SCREEN -->
-  <main id="loginScreen" class="login-screen">
+  <!-- =========================
+       LOGIN SCREEN
+  ========================== -->
+
+  <section id="loginScreen" class="login-screen">
 
     <div class="login-card">
 
-      <div class="lock-icon">🔐</div>
+      <div class="lock-icon">
+        🔐
+      </div>
 
       <h1>Private Gallery</h1>
-      <p class="subtitle">Enter your PIN to continue</p>
 
-      <div id="pinDots" class="pin-dots">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+      <p class="login-subtitle">
+        Enter your PIN to continue
+      </p>
 
-      <div id="errorMessage" class="error-message"></div>
+      <!--
+        This accepts:
+        Letters
+        Numbers
+        Symbols
+      -->
 
-      <div class="keypad">
+      <input
+        id="pinInput"
+        type="password"
+        placeholder="Enter PIN"
+        autocomplete="off"
+        maxlength="100"
+        spellcheck="false"
+      >
 
-        <button onclick="pressPin('1')">1</button>
-        <button onclick="pressPin('2')">2</button>
-        <button onclick="pressPin('3')">3</button>
+      <div id="pinDots" class="pin-dots"></div>
 
-        <button onclick="pressPin('4')">4</button>
-        <button onclick="pressPin('5')">5</button>
-        <button onclick="pressPin('6')">6</button>
-
-        <button onclick="pressPin('7')">7</button>
-        <button onclick="pressPin('8')">8</button>
-        <button onclick="pressPin('9')">9</button>
-
-        <button class="empty-key"></button>
-        <button onclick="pressPin('0')">0</button>
-        <button onclick="deletePin()" class="delete-key">⌫</button>
-
-      </div>
-
-      <button id="unlockButton" onclick="unlockGallery()" class="unlock-button">
+      <button
+        id="unlockButton"
+        class="unlock-button"
+        onclick="unlockGallery()"
+      >
         Unlock Gallery
       </button>
 
+      <p id="message" class="message"></p>
+
     </div>
 
-  </main>
+  </section>
 
 
-  <!-- GALLERY -->
-  <main id="galleryScreen" class="gallery-screen hidden">
+  <!-- =========================
+       GALLERY SCREEN
+  ========================== -->
+
+  <section id="galleryScreen" class="gallery-screen">
 
     <header class="gallery-header">
 
       <div>
-        <h1>My Private Gallery</h1>
-        <p>Your private photos</p>
+        <p class="small-label">PRIVATE</p>
+        <h1>My Gallery</h1>
+        <p class="gallery-subtitle">
+          Your private photo collection
+        </p>
       </div>
 
-      <div class="header-buttons">
-        <label class="upload-button">
+      <div class="header-actions">
+
+        <label class="add-button">
           + Add Photos
+
           <input
+            id="photoInput"
             type="file"
-            id="photoUpload"
             accept="image/*"
             multiple
-            onchange="uploadPhotos(event)"
             hidden
           >
         </label>
 
-        <button onclick="logout()" class="logout-button">
-          Lock
+        <button
+          class="lock-button"
+          onclick="lockGallery()"
+        >
+          🔒 Lock
         </button>
+
       </div>
 
     </header>
 
-    <section id="gallery" class="gallery"></section>
 
-    <div id="emptyGallery" class="empty-gallery hidden">
-      <div>🖼️</div>
-      <h2>No photos yet</h2>
-      <p>Add your first private photo.</p>
+    <!-- =========================
+         EMPTY GALLERY
+    ========================== -->
+
+    <div id="emptyState" class="empty-state">
+
+      <div class="empty-icon">
+        🖼️
+      </div>
+
+      <h2>Your gallery is empty</h2>
+
+      <p>
+        Add your first photos to your private gallery.
+      </p>
+
+      <label class="empty-add-button">
+        + Add Photos
+
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+          onchange="handleEmptyUpload(event)"
+        >
+      </label>
+
     </div>
 
-  </main>
+
+    <!-- =========================
+         PHOTO GRID
+    ========================== -->
+
+    <main
+      id="galleryGrid"
+      class="gallery-grid"
+    ></main>
+
+  </section>
 
 
-  <!-- PHOTO VIEWER -->
-  <div id="viewer" class="viewer hidden" onclick="closeViewer(event)">
+  <!-- =========================
+       FULLSCREEN PHOTO VIEWER
+  ========================== -->
 
-    <button class="viewer-close" onclick="closeViewer()">×</button>
+  <div
+    id="viewer"
+    class="viewer"
+  >
 
-    <img id="viewerImage" src="" alt="Private photo">
+    <button
+      class="viewer-close"
+      onclick="closeViewer()"
+    >
+      ×
+    </button>
+
+    <img
+      id="viewerImage"
+      src=""
+      alt="Gallery photo"
+    >
 
   </div>
 
@@ -119,3 +184,4 @@
 
 </body>
 </html>
+```
