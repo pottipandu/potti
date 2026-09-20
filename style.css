@@ -8,34 +8,50 @@
 body {
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
+
   background:
-    radial-gradient(circle at top left, #dbeafe, transparent 35%),
-    radial-gradient(circle at bottom right, #bfdbfe, transparent 35%),
+    radial-gradient(
+      circle at top left,
+      #dbeafe,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      #bfdbfe,
+      transparent 35%
+    ),
     #eff6ff;
+
   color: #172033;
 }
 
 
 /* =========================
-   LOGIN SCREEN
+   LOGIN
 ========================= */
 
 .login-screen {
   min-height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 24px;
 }
 
 .login-card {
   width: 100%;
   max-width: 430px;
+
   padding: 42px 32px;
+
   text-align: center;
 
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.75);
+
   border: 1px solid rgba(255, 255, 255, 0.9);
+
   border-radius: 28px;
 
   box-shadow:
@@ -57,23 +73,26 @@ body {
 
   font-size: 32px;
 
-  background: rgba(219, 234, 254, 0.8);
+  background: #dbeafe;
+
   border-radius: 22px;
 }
 
 .login-card h1 {
   font-size: 30px;
+
   margin-bottom: 8px;
 }
 
 .login-subtitle {
   color: #64748b;
+
   margin-bottom: 28px;
 }
 
 
 /* =========================
-   PASSWORD INPUT
+   PASSWORD
 ========================= */
 
 #pinInput {
@@ -83,13 +102,16 @@ body {
   padding: 0 18px;
 
   border: 1px solid #cbd5e1;
+
   border-radius: 16px;
 
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
 
-  font-size: 18px;
+  color: #172033;
+
+  font-size: 17px;
+
   text-align: center;
-  letter-spacing: 2px;
 
   outline: none;
 
@@ -103,41 +125,27 @@ body {
     0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
-.pin-dots {
-  min-height: 28px;
-  margin: 12px 0;
-
-  color: #2563eb;
-  font-size: 26px;
-  letter-spacing: 5px;
-}
-
-.pin-dot {
-  margin: 0 2px;
-}
-
-.pin-dot.filled {
-  color: #2563eb;
-}
-
 
 /* =========================
-   BUTTONS
+   UNLOCK
 ========================= */
 
 .unlock-button {
   width: 100%;
   height: 54px;
 
-  margin-top: 10px;
+  margin-top: 14px;
 
   border: none;
+
   border-radius: 16px;
 
   background: #2563eb;
+
   color: white;
 
   font-size: 16px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -147,6 +155,7 @@ body {
 
 .unlock-button:hover {
   background: #1d4ed8;
+
   transform: translateY(-1px);
 }
 
@@ -154,16 +163,27 @@ body {
   transform: translateY(0);
 }
 
+
+/* =========================
+   MESSAGE
+========================= */
+
 .message {
   min-height: 22px;
+
   margin-top: 16px;
 
   font-size: 14px;
+
   color: #475569;
 }
 
 .message.error {
   color: #dc2626;
+}
+
+.message.success {
+  color: #16a34a;
 }
 
 
@@ -173,37 +193,51 @@ body {
 
 .gallery-screen {
   display: none;
+
   min-height: 100vh;
-  padding: 32px;
+
   max-width: 1400px;
+
   margin: 0 auto;
+
+  padding: 32px;
 }
 
 .gallery-header {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 24px;
 
   margin-bottom: 32px;
 
   padding: 26px;
 
-  background: rgba(255, 255, 255, 0.68);
+  background: rgba(255, 255, 255, 0.7);
+
   border: 1px solid rgba(255, 255, 255, 0.9);
+
   border-radius: 24px;
 
   box-shadow:
     0 20px 60px rgba(30, 64, 175, 0.1);
 
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .small-label {
   color: #2563eb;
+
   font-size: 12px;
+
   font-weight: 700;
+
   letter-spacing: 2px;
+
   margin-bottom: 5px;
 }
 
@@ -213,33 +247,43 @@ body {
 
 .gallery-subtitle {
   color: #64748b;
+
   margin-top: 6px;
 }
 
 .header-actions {
   display: flex;
+
   align-items: center;
+
   gap: 10px;
 }
 
 
-/* Add photos */
+/* =========================
+   BUTTONS
+========================= */
 
 .add-button,
 .empty-add-button {
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
 
   min-height: 46px;
+
   padding: 0 18px;
 
   border-radius: 14px;
 
   background: #2563eb;
+
   color: white;
 
   font-weight: 600;
+
   font-size: 14px;
 
   cursor: pointer;
@@ -252,17 +296,16 @@ body {
   background: #1d4ed8;
 }
 
-
-/* Lock */
-
 .lock-button {
   min-height: 46px;
+
   padding: 0 18px;
 
   border: 1px solid #cbd5e1;
+
   border-radius: 14px;
 
-  background: rgba(255, 255, 255, 0.8);
+  background: white;
 
   color: #334155;
 
@@ -272,7 +315,7 @@ body {
 }
 
 .lock-button:hover {
-  background: white;
+  background: #f8fafc;
 }
 
 
@@ -288,11 +331,13 @@ body {
   background: rgba(255, 255, 255, 0.55);
 
   border: 1px dashed #bfdbfe;
+
   border-radius: 24px;
 }
 
 .empty-icon {
   font-size: 48px;
+
   margin-bottom: 18px;
 }
 
@@ -302,11 +347,8 @@ body {
 
 .empty-state p {
   color: #64748b;
-  margin-bottom: 22px;
-}
 
-.empty-add-button {
-  display: inline-flex;
+  margin-bottom: 22px;
 }
 
 
@@ -318,7 +360,10 @@ body {
   display: grid;
 
   grid-template-columns:
-    repeat(auto-fill, minmax(230px, 1fr));
+    repeat(
+      auto-fill,
+      minmax(230px, 1fr)
+    );
 
   gap: 20px;
 }
@@ -326,9 +371,7 @@ body {
 .photo-card {
   overflow: hidden;
 
-  background: rgba(255, 255, 255, 0.8);
-
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: white;
 
   border-radius: 20px;
 
@@ -347,6 +390,7 @@ body {
 
 .photo-card img {
   width: 100%;
+
   height: 250px;
 
   display: block;
@@ -362,7 +406,9 @@ body {
   min-height: 54px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   gap: 12px;
@@ -374,6 +420,7 @@ body {
   overflow: hidden;
 
   text-overflow: ellipsis;
+
   white-space: nowrap;
 
   font-size: 14px;
@@ -383,11 +430,13 @@ body {
   flex-shrink: 0;
 
   border: none;
+
   background: transparent;
 
   color: #dc2626;
 
   font-size: 13px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -395,7 +444,7 @@ body {
 
 
 /* =========================
-   FULLSCREEN VIEWER
+   VIEWER
 ========================= */
 
 .viewer {
@@ -408,35 +457,37 @@ body {
   display: none;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 30px;
 
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(15, 23, 42, 0.94);
 }
 
 .viewer img {
   max-width: 95vw;
+
   max-height: 90vh;
 
   object-fit: contain;
 
   border-radius: 12px;
-
-  box-shadow:
-    0 20px 80px rgba(0, 0, 0, 0.35);
 }
 
 .viewer-close {
   position: absolute;
 
   top: 20px;
+
   right: 24px;
 
   width: 48px;
+
   height: 48px;
 
   border: none;
+
   border-radius: 50%;
 
   background: rgba(255, 255, 255, 0.15);
@@ -444,7 +495,6 @@ body {
   color: white;
 
   font-size: 32px;
-  line-height: 1;
 
   cursor: pointer;
 }
@@ -462,6 +512,7 @@ body {
 
   .gallery-header {
     flex-direction: column;
+
     align-items: stretch;
 
     padding: 20px;
@@ -492,6 +543,7 @@ body {
   }
 
 }
+
 
 @media (max-width: 400px) {
 
