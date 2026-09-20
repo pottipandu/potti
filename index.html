@@ -1,13 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Private Gallery</title>
 
@@ -19,49 +15,38 @@
 
 <body>
 
-  <!-- =========================
-       LOGIN SCREEN
-  ========================== -->
-
+  <!-- LOGIN -->
   <section id="loginScreen" class="login-screen">
 
     <div class="login-card">
 
-      <div class="lock-icon">
-        🔐
-      </div>
+      <div class="lock-icon">🔐</div>
 
       <h1>Private Gallery</h1>
 
       <p class="login-subtitle">
-        Enter your PIN to continue
+        Enter your password to continue
       </p>
 
-      <!--
-        This accepts:
-        Letters
-        Numbers
-        Symbols
-      -->
+      <form id="loginForm">
 
-      <input
-        id="pinInput"
-        type="password"
-        placeholder="Enter PIN"
-        autocomplete="off"
-        maxlength="100"
-        spellcheck="false"
-      >
+        <input
+          id="pinInput"
+          type="password"
+          placeholder="Enter password"
+          autocomplete="off"
+          maxlength="100"
+          spellcheck="false"
+        >
 
-      <div id="pinDots" class="pin-dots"></div>
+        <button
+          type="submit"
+          class="unlock-button"
+        >
+          Unlock Gallery
+        </button>
 
-      <button
-        id="unlockButton"
-        class="unlock-button"
-        onclick="unlockGallery()"
-      >
-        Unlock Gallery
-      </button>
+      </form>
 
       <p id="message" class="message"></p>
 
@@ -70,17 +55,16 @@
   </section>
 
 
-  <!-- =========================
-       GALLERY SCREEN
-  ========================== -->
-
+  <!-- GALLERY -->
   <section id="galleryScreen" class="gallery-screen">
 
     <header class="gallery-header">
 
       <div>
         <p class="small-label">PRIVATE</p>
+
         <h1>My Gallery</h1>
+
         <p class="gallery-subtitle">
           Your private photo collection
         </p>
@@ -101,8 +85,9 @@
         </label>
 
         <button
+          id="lockButton"
           class="lock-button"
-          onclick="lockGallery()"
+          type="button"
         >
           🔒 Lock
         </button>
@@ -112,15 +97,10 @@
     </header>
 
 
-    <!-- =========================
-         EMPTY GALLERY
-    ========================== -->
-
+    <!-- EMPTY STATE -->
     <div id="emptyState" class="empty-state">
 
-      <div class="empty-icon">
-        🖼️
-      </div>
+      <div class="empty-icon">🖼️</div>
 
       <h2>Your gallery is empty</h2>
 
@@ -132,21 +112,18 @@
         + Add Photos
 
         <input
+          id="emptyPhotoInput"
           type="file"
           accept="image/*"
           multiple
           hidden
-          onchange="handleEmptyUpload(event)"
         >
       </label>
 
     </div>
 
 
-    <!-- =========================
-         PHOTO GRID
-    ========================== -->
-
+    <!-- PHOTOS -->
     <main
       id="galleryGrid"
       class="gallery-grid"
@@ -155,18 +132,16 @@
   </section>
 
 
-  <!-- =========================
-       FULLSCREEN PHOTO VIEWER
-  ========================== -->
-
+  <!-- PHOTO VIEWER -->
   <div
     id="viewer"
     class="viewer"
   >
 
     <button
+      id="viewerClose"
       class="viewer-close"
-      onclick="closeViewer()"
+      type="button"
     >
       ×
     </button>
@@ -180,6 +155,7 @@
   </div>
 
 
+  <!-- YOUR JAVASCRIPT -->
   <script src="script.js"></script>
 
 </body>
