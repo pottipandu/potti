@@ -1,415 +1,789 @@
-// =====================================================
-// SUPABASE CONFIGURATION
-// =====================================================
+```javascript
+/* =====================================================
+   SUPABASE SETTINGS
+   ===================================================== */
 
-const SUPABASE_URL = "https://supabase.com/dashboard/project/wfhyyzoxknvdpfyxxmbp";
+const SUPABASE_URL =
+  "https://supabase.com/dashboard/project/wfhyyzoxknvdpfyxxmbp";
 
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1uO-Uv8FdiI3ol2gXZlOrQ_WnRSt1x0";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_1uO-Uv8FdiI3ol2gXZlOrQ_WnRSt1x0";
 
-// This is the email of the Supabase Auth user you created.
-// The PIN/password is NOT written here.
-const GALLERY_EMAIL = "taara510p@gmail.com";
-
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+const GALLERY_EMAIL =
+  "taara510p@gmail.com";
 
 
-// =====================================================
-// SETTINGS
-// =====================================================
+/* =====================================================
+   SUPABASE
+   ===================================================== */
 
-const BUCKET_NAME = "private-gallery";
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+const BUCKET_NAME =
+  "private-gallery";
+
 
 let enteredPin = "";
 
 
-// =====================================================
-// PAGE START
-// =====================================================
+/* =====================================================
+   ELEMENTS
+   ===================================================== */
 
-document.addEventListener("DOMContentLoaded", async () => {
+const loginScreen =
+  document.getElementById("loginScreen");
 
-  const { data } = await supabaseClient.auth.getSession();
+const galleryScreen =
+  document.getElementById("galleryScreen");
 
-  if (data.session) {
-    showGallery();
-  } else {
-    showLogin();
-  }
+const pinInput =
+  document.getElementById("pinInput");
 
-});
+const pinDots =
+  document.getElementById("pinDots");
 
+const message =
+  document.getElementById("message");
 
-// =====================================================
-// PIN KEYPAD
-// =====================================================
+const galleryGrid =
+  document.getElementById("galleryGrid");
 
-function pressPin(number) {
+const emptyState =
+  document.getElementById("emptyState");
 
-  // Maximum 6 digits
-  if (enteredPin.length >= 6) {
-    return;
-  }
+const photoInput =
+  document.getElementById("photoInput");
 
-  enteredPin += number;
+const viewer =
+  document.getElementById("viewer");
 
-  updatePinDots();
-
-  clearError();
-}
-
-
-function deletePin() {
-
-  enteredPin = enteredPin.slice(0, -1);
-
-  updatePinDots();
-
-  clearError();
-}
+const viewerImage =
+  document.getElementById("viewerImage");
 
 
-function updatePinDots() {
+/* =====================================================
+   START WEBSITE
+   ===================================================== */
 
-  const dots = document.querySelectorAll("#pinDots span");
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
 
-  dots.forEach((dot, index) => {
+    setupPinInput();
 
-    if (index < enteredPin.length) {
-      dot.classList.add("filled");
+    const { data } =
+      await supabaseClient.auth.getSession();
+
+
+    if (data.session) {
+
+      showGallery();
+
     } else {
-      dot.classList.remove("filled");
+
+      showLogin();
+
     }
 
-  });
+  }
+);
+
+
+/* =====================================================
+   PASSWORD / PIN INPUT
+   ===================================================== */
+
+function setupPinInput() {
+
+  if (!pinInput) return;
+
+
+  pinInput.addEventListener(
+    "input",
+    () => {
+
+      enteredPin =
+        pinInput.value;
+
+      updatePinDisplay();
+
+    }
+  );
+
+
+  pinInput.addEventListener(
+    "keydown",
+    (event) => {
+
+      if (event.key === "Enter") {
+
+        unlockGallery();
+
+      }
+
+    }
+  );
 
 }
 
 
-// =====================================================
-// PIN LOGIN
-// =====================================================
+/* =====================================================
+   PIN DOTS
+   ===================================================== */
 
-async function unlockGallery() {
+function updatePinDisplay() {
 
-  if (!enteredPin) {
-    showError("Please enter your PIN.");
-    return;
+  if (!pinDots) return;
+
+
+  pinDots.innerHTML = "";
+
+
+  for (
+    let i = 0;
+    i < enteredPin.length;
+    i++
+  ) {
+
+    const dot =
+      document.createElement("span");
+
+
+    dot.className =
+      "pin-dot filled";
+
+
+    dot.textContent =
+      "•";
+
+
+    pinDots.appendChild(dot);
+
   }
 
-  const button = document.getElementById("unlockButton");
+}
 
-  button.disabled = true;
-  button.textContent = "Checking...";
+
+/* =====================================================
+   UNLOCK
+   ===================================================== */
+
+function unlockGallery() {
+
+  if (!enteredPin) {
+
+    showMessage(
+      "Please enter your PIN.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  authenticate();
+
+}
+
+
+/* =====================================================
+   SUPABASE AUTHENTICATION
+   ===================================================== */
+
+async function authenticate() {
+
+  showMessage("Checking...");
+
 
   const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-      email: GALLERY_EMAIL,
-      password: enteredPin
-    });
+    await supabaseClient.auth
+      .signInWithPassword({
 
-  button.disabled = false;
-  button.textContent = "Unlock Gallery";
+        email:
+          GALLERY_EMAIL,
+
+        password:
+          enteredPin
+
+      });
+
 
   if (error) {
 
-    showError("Incorrect PIN.");
+    console.error(
+      "Authentication error:",
+      error
+    );
 
-    enteredPin = "";
-    updatePinDots();
+
+    showMessage(
+      "Incorrect PIN.",
+      true
+    );
+
 
     return;
+
   }
 
-  enteredPin = "";
-  updatePinDots();
 
-  showGallery();
+  if (data.session) {
 
-  await loadPhotos();
+    enteredPin = "";
+
+
+    if (pinInput) {
+
+      pinInput.value = "";
+
+    }
+
+
+    updatePinDisplay();
+
+
+    showGallery();
+
+  }
+
 }
 
 
-// =====================================================
-// SHOW LOGIN
-// =====================================================
+/* =====================================================
+   SHOW LOGIN
+   ===================================================== */
 
 function showLogin() {
 
-  document.getElementById("loginScreen")
-    .classList.remove("hidden");
+  if (loginScreen) {
 
-  document.getElementById("galleryScreen")
-    .classList.add("hidden");
+    loginScreen.style.display =
+      "flex";
+
+  }
+
+
+  if (galleryScreen) {
+
+    galleryScreen.style.display =
+      "none";
+
+  }
+
+
+  enteredPin = "";
+
+
+  if (pinInput) {
+
+    pinInput.value = "";
+
+    setTimeout(
+      () => pinInput.focus(),
+      100
+    );
+
+  }
+
+
+  updatePinDisplay();
+
 }
 
 
-// =====================================================
-// SHOW GALLERY
-// =====================================================
+/* =====================================================
+   SHOW GALLERY
+   ===================================================== */
 
-function showGallery() {
+async function showGallery() {
 
-  document.getElementById("loginScreen")
-    .classList.add("hidden");
+  if (loginScreen) {
 
-  document.getElementById("galleryScreen")
-    .classList.remove("hidden");
+    loginScreen.style.display =
+      "none";
+
+  }
+
+
+  if (galleryScreen) {
+
+    galleryScreen.style.display =
+      "block";
+
+  }
+
+
+  await loadPhotos();
 
 }
 
 
-// =====================================================
-// LOAD PHOTOS
-// =====================================================
+/* =====================================================
+   LOAD PHOTOS
+   ===================================================== */
 
 async function loadPhotos() {
 
-  const gallery = document.getElementById("gallery");
+  if (!galleryGrid) return;
 
-  gallery.innerHTML = "";
 
-  const { data: photos, error } =
+  galleryGrid.innerHTML = "";
+
+
+  const {
+    data: photos,
+    error
+  } =
     await supabaseClient
       .from("photos")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
 
   if (error) {
 
-    console.error(error);
+    console.error(
+      "Database error:",
+      error
+    );
 
-    gallery.innerHTML =
-      "<p>Unable to load gallery.</p>";
+
+    showMessage(
+      "Unable to load gallery.",
+      true
+    );
+
 
     return;
+
   }
 
 
-  if (!photos || photos.length === 0) {
+  if (
+    !photos ||
+    photos.length === 0
+  ) {
 
-    document.getElementById("emptyGallery")
-      .classList.remove("hidden");
+    if (emptyState) {
+
+      emptyState.style.display =
+        "block";
+
+    }
+
 
     return;
+
   }
 
 
-  document.getElementById("emptyGallery")
-    .classList.add("hidden");
+  if (emptyState) {
+
+    emptyState.style.display =
+      "none";
+
+  }
 
 
   for (const photo of photos) {
 
-    await createPhotoCard(photo);
+    const {
+      data: signedUrlData,
+      error: urlError
+    } =
+      await supabaseClient
+        .storage
+        .from(BUCKET_NAME)
+        .createSignedUrl(
+          photo.storage_path,
+          3600
+        );
+
+
+    if (urlError) {
+
+      console.error(
+        "Signed URL error:",
+        urlError
+      );
+
+
+      continue;
+
+    }
+
+
+    createPhotoCard(
+      photo,
+      signedUrlData.signedUrl
+    );
 
   }
 
 }
 
 
-// =====================================================
-// CREATE PHOTO CARD
-// =====================================================
+/* =====================================================
+   CREATE PHOTO CARD
+   ===================================================== */
 
-async function createPhotoCard(photo) {
+function createPhotoCard(
+  photo,
+  imageUrl
+) {
 
-  const gallery = document.getElementById("gallery");
-
-  // Create temporary authorized URL
-  const { data, error } =
-    await supabaseClient.storage
-      .from(BUCKET_NAME)
-      .createSignedUrl(photo.storage_path, 3600);
+  const card =
+    document.createElement("div");
 
 
-  if (error) {
-
-    console.error("Unable to create photo URL:", error);
-
-    return;
-  }
+  card.className =
+    "photo-card";
 
 
-  const card = document.createElement("div");
-
-  card.className = "photo-card";
-
-
-  const image = document.createElement("img");
-
-  image.src = data.signedUrl;
-
-  image.alt = photo.caption || photo.file_name;
-
-  image.onclick = () => {
-    openViewer(data.signedUrl);
-  };
+  const image =
+    document.createElement("img");
 
 
-  const deleteButton = document.createElement("button");
+  image.src =
+    imageUrl;
 
-  deleteButton.className = "delete-photo";
 
-  deleteButton.textContent = "×";
+  image.alt =
+    photo.caption ||
+    photo.file_name;
 
-  deleteButton.onclick = async (event) => {
 
-    event.stopPropagation();
+  image.loading =
+    "lazy";
 
-    await deletePhoto(photo);
 
-  };
+  image.addEventListener(
+    "click",
+    () => {
+
+      openViewer(imageUrl);
+
+    }
+  );
+
+
+  const info =
+    document.createElement("div");
+
+
+  info.className =
+    "photo-info";
+
+
+  const title =
+    document.createElement("div");
+
+
+  title.textContent =
+    photo.caption ||
+    photo.file_name;
+
+
+  const deleteButton =
+    document.createElement("button");
+
+
+  deleteButton.textContent =
+    "Delete";
+
+
+  deleteButton.addEventListener(
+    "click",
+    async (event) => {
+
+      event.stopPropagation();
+
+      await deletePhoto(photo);
+
+    }
+  );
+
+
+  info.appendChild(title);
+
+  info.appendChild(
+    deleteButton
+  );
 
 
   card.appendChild(image);
-  card.appendChild(deleteButton);
 
-  gallery.appendChild(card);
+  card.appendChild(info);
+
+
+  galleryGrid.appendChild(card);
 
 }
 
 
-// =====================================================
-// UPLOAD PHOTOS
-// =====================================================
+/* =====================================================
+   UPLOAD FROM HEADER
+   ===================================================== */
 
-async function uploadPhotos(event) {
+if (photoInput) {
 
-  const files = event.target.files;
+  photoInput.addEventListener(
+    "change",
+    async () => {
 
-  if (!files || files.length === 0) {
-    return;
-  }
+      const files =
+        Array.from(
+          photoInput.files || []
+        );
 
 
-  const { data: sessionData } =
-    await supabaseClient.auth.getSession();
+      for (const file of files) {
+
+        await uploadPhoto(file);
+
+      }
 
 
-  if (!sessionData.session) {
+      photoInput.value = "";
 
-    showLogin();
 
-    return;
-  }
+      await loadPhotos();
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   UPLOAD FROM EMPTY STATE
+   ===================================================== */
+
+async function handleEmptyUpload(event) {
+
+  const files =
+    Array.from(
+      event.target.files || []
+    );
 
 
   for (const file of files) {
 
-    try {
-
-      const extension =
-        file.name.split(".").pop();
-
-      const uniqueName =
-        `${crypto.randomUUID()}.${extension}`;
-
-      const storagePath =
-        `gallery/${uniqueName}`;
-
-
-      // Upload actual file
-      const { error: uploadError } =
-        await supabaseClient.storage
-          .from(BUCKET_NAME)
-          .upload(storagePath, file);
-
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-
-      // Save metadata
-      const { error: databaseError } =
-        await supabaseClient
-          .from("photos")
-          .insert({
-            file_name: file.name,
-            storage_path: storagePath,
-            caption: file.name
-          });
-
-
-      if (databaseError) {
-
-        // Remove uploaded file if metadata fails
-        await supabaseClient.storage
-          .from(BUCKET_NAME)
-          .remove([storagePath]);
-
-        throw databaseError;
-      }
-
-    } catch (error) {
-
-      console.error("Upload failed:", error);
-
-      alert(`Could not upload ${file.name}`);
-
-    }
+    await uploadPhoto(file);
 
   }
 
 
   event.target.value = "";
 
+
   await loadPhotos();
 
 }
 
 
-// =====================================================
-// DELETE PHOTO
-// =====================================================
+/* =====================================================
+   UPLOAD PHOTO
+   ===================================================== */
+
+async function uploadPhoto(file) {
+
+  if (
+    !file ||
+    !file.type.startsWith("image/")
+  ) {
+
+    showMessage(
+      "Please select an image.",
+      true
+    );
+
+
+    return;
+
+  }
+
+
+  const extension =
+    file.name.includes(".")
+      ? file.name
+          .split(".")
+          .pop()
+      : "jpg";
+
+
+  const filePath =
+    `gallery/${crypto.randomUUID()}.${extension}`;
+
+
+  const {
+    error: uploadError
+  } =
+    await supabaseClient
+      .storage
+      .from(BUCKET_NAME)
+      .upload(
+        filePath,
+        file
+      );
+
+
+  if (uploadError) {
+
+    console.error(
+      "Upload error:",
+      uploadError
+    );
+
+
+    showMessage(
+      "Upload failed.",
+      true
+    );
+
+
+    return;
+
+  }
+
+
+  const {
+    error: dbError
+  } =
+    await supabaseClient
+      .from("photos")
+      .insert({
+
+        file_name:
+          file.name,
+
+        storage_path:
+          filePath,
+
+        caption:
+          ""
+
+      });
+
+
+  if (dbError) {
+
+    console.error(
+      "Database insert error:",
+      dbError
+    );
+
+
+    await supabaseClient
+      .storage
+      .from(BUCKET_NAME)
+      .remove([
+        filePath
+      ]);
+
+
+    showMessage(
+      "Photo information could not be saved.",
+      true
+    );
+
+
+    return;
+
+  }
+
+
+  showMessage(
+    "Photo added successfully."
+  );
+
+}
+
+
+/* =====================================================
+   DELETE PHOTO
+   ===================================================== */
 
 async function deletePhoto(photo) {
 
   const confirmed =
-    confirm("Delete this photo permanently?");
-
-  if (!confirmed) {
-    return;
-  }
+    confirm(
+      `Delete "${photo.file_name}"?`
+    );
 
 
-  // Delete actual file
-  const { error: storageError } =
-    await supabaseClient.storage
+  if (!confirmed) return;
+
+
+  const {
+    error: storageError
+  } =
+    await supabaseClient
+      .storage
       .from(BUCKET_NAME)
-      .remove([photo.storage_path]);
+      .remove([
+        photo.storage_path
+      ]);
 
 
   if (storageError) {
 
-    console.error(storageError);
+    console.error(
+      "Storage delete error:",
+      storageError
+    );
 
-    alert("Could not delete photo.");
+
+    showMessage(
+      "Could not delete photo.",
+      true
+    );
+
 
     return;
+
   }
 
 
-  // Delete database record
-  const { error: databaseError } =
+  const {
+    error: dbError
+  } =
     await supabaseClient
       .from("photos")
       .delete()
-      .eq("id", photo.id);
+      .eq(
+        "id",
+        photo.id
+      );
 
 
-  if (databaseError) {
+  if (dbError) {
 
-    console.error(databaseError);
+    console.error(
+      "Database delete error:",
+      dbError
+    );
 
-    alert("Photo file deleted, but database record could not be removed.");
+
+    showMessage(
+      "Photo file deleted, but database cleanup failed.",
+      true
+    );
+
 
     return;
+
   }
 
 
@@ -418,70 +792,128 @@ async function deletePhoto(photo) {
 }
 
 
-// =====================================================
-// PHOTO VIEWER
-// =====================================================
+/* =====================================================
+   PHOTO VIEWER
+   ===================================================== */
 
-function openViewer(url) {
-
-  document.getElementById("viewerImage").src = url;
-
-  document.getElementById("viewer")
-    .classList.remove("hidden");
-
-}
-
-
-function closeViewer(event) {
+function openViewer(imageUrl) {
 
   if (
-    event &&
-    event.target &&
-    event.target.id === "viewerImage"
+    !viewer ||
+    !viewerImage
   ) {
+
     return;
+
   }
 
-  document.getElementById("viewer")
-    .classList.add("hidden");
 
-  document.getElementById("viewerImage").src = "";
+  viewerImage.src =
+    imageUrl;
+
+
+  viewer.style.display =
+    "flex";
 
 }
 
 
-// =====================================================
-// LOGOUT / LOCK
-// =====================================================
+function closeViewer() {
 
-async function logout() {
+  if (!viewer) return;
 
-  await supabaseClient.auth.signOut();
+
+  viewer.style.display =
+    "none";
+
+
+  if (viewerImage) {
+
+    viewerImage.src = "";
+
+  }
+
+}
+
+
+if (viewer) {
+
+  viewer.addEventListener(
+    "click",
+    (event) => {
+
+      if (
+        event.target ===
+        viewer
+      ) {
+
+        closeViewer();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   LOCK GALLERY
+   ===================================================== */
+
+async function lockGallery() {
+
+  await supabaseClient
+    .auth
+    .signOut();
+
+
+  closeViewer();
+
 
   showLogin();
 
-  enteredPin = "";
-
-  updatePinDots();
-
 }
 
 
-// =====================================================
-// ERRORS
-// =====================================================
+/* =====================================================
+   MESSAGE
+   ===================================================== */
 
-function showError(message) {
+function showMessage(
+  text,
+  isError = false
+) {
 
-  document.getElementById("errorMessage")
-    .textContent = message;
+  if (!message) return;
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    isError
+      ? "message error"
+      : "message";
+
+
+  setTimeout(
+    () => {
+
+      if (
+        message.textContent ===
+        text
+      ) {
+
+        message.textContent =
+          "";
+
+      }
+
+    },
+    3000
+  );
 
 }
-
-
-function clearError() {
-
-  document.getElementById("errorMessage")
-    .textContent = "";
-
-}
+```
