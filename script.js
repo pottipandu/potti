@@ -1,7 +1,12 @@
 ```javascript
 /* =====================================================
-   SUPABASE SETTINGS
-   ===================================================== */
+   YOUR SUPABASE DETAILS
+   =====================================================
+
+   Replace ONLY these 3 values.
+
+   Do NOT put your password here.
+===================================================== */
 
 const SUPABASE_URL =
   "https://supabase.com/dashboard/project/wfhyyzoxknvdpfyxxmbp";
@@ -15,7 +20,7 @@ const GALLERY_EMAIL =
 
 /* =====================================================
    SUPABASE
-   ===================================================== */
+===================================================== */
 
 const supabaseClient =
   window.supabase.createClient(
@@ -28,12 +33,9 @@ const BUCKET_NAME =
   "private-gallery";
 
 
-let enteredPin = "";
-
-
 /* =====================================================
    ELEMENTS
-   ===================================================== */
+===================================================== */
 
 const loginScreen =
   document.getElementById("loginScreen");
@@ -41,11 +43,11 @@ const loginScreen =
 const galleryScreen =
   document.getElementById("galleryScreen");
 
+const loginForm =
+  document.getElementById("loginForm");
+
 const pinInput =
   document.getElementById("pinInput");
-
-const pinDots =
-  document.getElementById("pinDots");
 
 const message =
   document.getElementById("message");
@@ -59,25 +61,45 @@ const emptyState =
 const photoInput =
   document.getElementById("photoInput");
 
+const emptyPhotoInput =
+  document.getElementById("emptyPhotoInput");
+
+const lockButton =
+  document.getElementById("lockButton");
+
 const viewer =
   document.getElementById("viewer");
 
 const viewerImage =
   document.getElementById("viewerImage");
 
+const viewerClose =
+  document.getElementById("viewerClose");
+
 
 /* =====================================================
-   START WEBSITE
-   ===================================================== */
+   START
+===================================================== */
 
 document.addEventListener(
   "DOMContentLoaded",
   async () => {
 
-    setupPinInput();
-
-    const { data } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+      console.error(error);
+
+      showLogin();
+
+      return;
+    }
 
 
     if (data.session) {
@@ -95,113 +117,49 @@ document.addEventListener(
 
 
 /* =====================================================
-   PASSWORD / PIN INPUT
-   ===================================================== */
+   LOGIN FORM
+===================================================== */
 
-function setupPinInput() {
+loginForm.addEventListener(
+  "submit",
+  async (event) => {
 
-  if (!pinInput) return;
+    event.preventDefault();
 
-
-  pinInput.addEventListener(
-    "input",
-    () => {
-
-      enteredPin =
-        pinInput.value;
-
-      updatePinDisplay();
-
-    }
-  );
-
-
-  pinInput.addEventListener(
-    "keydown",
-    (event) => {
-
-      if (event.key === "Enter") {
-
-        unlockGallery();
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   PIN DOTS
-   ===================================================== */
-
-function updatePinDisplay() {
-
-  if (!pinDots) return;
-
-
-  pinDots.innerHTML = "";
-
-
-  for (
-    let i = 0;
-    i < enteredPin.length;
-    i++
-  ) {
-
-    const dot =
-      document.createElement("span");
-
-
-    dot.className =
-      "pin-dot filled";
-
-
-    dot.textContent =
-      "•";
-
-
-    pinDots.appendChild(dot);
+    await unlockGallery();
 
   }
-
-}
+);
 
 
 /* =====================================================
    UNLOCK
-   ===================================================== */
+===================================================== */
 
-function unlockGallery() {
+async function unlockGallery() {
 
-  if (!enteredPin) {
+  const password =
+    pinInput.value;
+
+
+  if (!password) {
 
     showMessage(
-      "Please enter your PIN.",
+      "Please enter your password.",
       true
     );
 
     return;
-
   }
 
-
-  authenticate();
-
-}
-
-
-/* =====================================================
-   SUPABASE AUTHENTICATION
-   ===================================================== */
-
-async function authenticate() {
 
   showMessage("Checking...");
 
 
-  const { data, error } =
+  const {
+    data,
+    error
+  } =
     await supabaseClient.auth
       .signInWithPassword({
 
@@ -209,7 +167,7 @@ async function authenticate() {
           GALLERY_EMAIL,
 
         password:
-          enteredPin
+          password
 
       });
 
@@ -217,36 +175,24 @@ async function authenticate() {
   if (error) {
 
     console.error(
-      "Authentication error:",
+      "Supabase login error:",
       error
     );
 
 
     showMessage(
-      "Incorrect PIN.",
+      "Incorrect PIN or password.",
       true
     );
 
 
     return;
-
   }
 
 
   if (data.session) {
 
-    enteredPin = "";
-
-
-    if (pinInput) {
-
-      pinInput.value = "";
-
-    }
-
-
-    updatePinDisplay();
-
+    pinInput.value = "";
 
     showGallery();
 
@@ -257,66 +203,38 @@ async function authenticate() {
 
 /* =====================================================
    SHOW LOGIN
-   ===================================================== */
+===================================================== */
 
 function showLogin() {
 
-  if (loginScreen) {
+  loginScreen.style.display =
+    "flex";
 
-    loginScreen.style.display =
-      "flex";
-
-  }
-
-
-  if (galleryScreen) {
-
-    galleryScreen.style.display =
-      "none";
-
-  }
+  galleryScreen.style.display =
+    "none";
 
 
-  enteredPin = "";
+  pinInput.value = "";
 
-
-  if (pinInput) {
-
-    pinInput.value = "";
-
-    setTimeout(
-      () => pinInput.focus(),
-      100
-    );
-
-  }
-
-
-  updatePinDisplay();
+  setTimeout(
+    () => pinInput.focus(),
+    100
+  );
 
 }
 
 
 /* =====================================================
    SHOW GALLERY
-   ===================================================== */
+===================================================== */
 
 async function showGallery() {
 
-  if (loginScreen) {
+  loginScreen.style.display =
+    "none";
 
-    loginScreen.style.display =
-      "none";
-
-  }
-
-
-  if (galleryScreen) {
-
-    galleryScreen.style.display =
-      "block";
-
-  }
+  galleryScreen.style.display =
+    "block";
 
 
   await loadPhotos();
@@ -326,12 +244,9 @@ async function showGallery() {
 
 /* =====================================================
    LOAD PHOTOS
-   ===================================================== */
+===================================================== */
 
 async function loadPhotos() {
-
-  if (!galleryGrid) return;
-
 
   galleryGrid.innerHTML = "";
 
@@ -354,7 +269,7 @@ async function loadPhotos() {
   if (error) {
 
     console.error(
-      "Database error:",
+      "Photos database error:",
       error
     );
 
@@ -375,32 +290,23 @@ async function loadPhotos() {
     photos.length === 0
   ) {
 
-    if (emptyState) {
-
-      emptyState.style.display =
-        "block";
-
-    }
-
+    emptyState.style.display =
+      "block";
 
     return;
 
   }
 
 
-  if (emptyState) {
-
-    emptyState.style.display =
-      "none";
-
-  }
+  emptyState.style.display =
+    "none";
 
 
   for (const photo of photos) {
 
     const {
-      data: signedUrlData,
-      error: urlError
+      data: signedData,
+      error: signedError
     } =
       await supabaseClient
         .storage
@@ -411,13 +317,12 @@ async function loadPhotos() {
         );
 
 
-    if (urlError) {
+    if (signedError) {
 
       console.error(
         "Signed URL error:",
-        urlError
+        signedError
       );
-
 
       continue;
 
@@ -426,7 +331,7 @@ async function loadPhotos() {
 
     createPhotoCard(
       photo,
-      signedUrlData.signedUrl
+      signedData.signedUrl
     );
 
   }
@@ -436,7 +341,7 @@ async function loadPhotos() {
 
 /* =====================================================
    CREATE PHOTO CARD
-   ===================================================== */
+===================================================== */
 
 function createPhotoCard(
   photo,
@@ -446,7 +351,6 @@ function createPhotoCard(
   const card =
     document.createElement("div");
 
-
   card.className =
     "photo-card";
 
@@ -454,15 +358,12 @@ function createPhotoCard(
   const image =
     document.createElement("img");
 
-
   image.src =
     imageUrl;
-
 
   image.alt =
     photo.caption ||
     photo.file_name;
-
 
   image.loading =
     "lazy";
@@ -481,14 +382,12 @@ function createPhotoCard(
   const info =
     document.createElement("div");
 
-
   info.className =
     "photo-info";
 
 
   const title =
     document.createElement("div");
-
 
   title.textContent =
     photo.caption ||
@@ -498,6 +397,8 @@ function createPhotoCard(
   const deleteButton =
     document.createElement("button");
 
+  deleteButton.type =
+    "button";
 
   deleteButton.textContent =
     "Delete";
@@ -505,9 +406,7 @@ function createPhotoCard(
 
   deleteButton.addEventListener(
     "click",
-    async (event) => {
-
-      event.stopPropagation();
+    async () => {
 
       await deletePhoto(photo);
 
@@ -533,49 +432,60 @@ function createPhotoCard(
 
 
 /* =====================================================
-   UPLOAD FROM HEADER
-   ===================================================== */
+   HEADER UPLOAD
+===================================================== */
 
-if (photoInput) {
+photoInput.addEventListener(
+  "change",
+  async () => {
 
-  photoInput.addEventListener(
-    "change",
-    async () => {
-
-      const files =
-        Array.from(
-          photoInput.files || []
-        );
+    const files =
+      Array.from(
+        photoInput.files || []
+      );
 
 
-      for (const file of files) {
-
-        await uploadPhoto(file);
-
-      }
+    await uploadFiles(files);
 
 
-      photoInput.value = "";
+    photoInput.value = "";
 
-
-      await loadPhotos();
-
-    }
-  );
-
-}
+  }
+);
 
 
 /* =====================================================
-   UPLOAD FROM EMPTY STATE
-   ===================================================== */
+   EMPTY STATE UPLOAD
+===================================================== */
 
-async function handleEmptyUpload(event) {
+emptyPhotoInput.addEventListener(
+  "change",
+  async () => {
 
-  const files =
-    Array.from(
-      event.target.files || []
-    );
+    const files =
+      Array.from(
+        emptyPhotoInput.files || []
+      );
+
+
+    await uploadFiles(files);
+
+
+    emptyPhotoInput.value = "";
+
+  }
+);
+
+
+/* =====================================================
+   UPLOAD FILES
+===================================================== */
+
+async function uploadFiles(files) {
+
+  if (!files.length) {
+    return;
+  }
 
 
   for (const file of files) {
@@ -585,30 +495,25 @@ async function handleEmptyUpload(event) {
   }
 
 
-  event.target.value = "";
-
-
   await loadPhotos();
 
 }
 
 
 /* =====================================================
-   UPLOAD PHOTO
-   ===================================================== */
+   UPLOAD ONE PHOTO
+===================================================== */
 
 async function uploadPhoto(file) {
 
   if (
-    !file ||
     !file.type.startsWith("image/")
   ) {
 
     showMessage(
-      "Please select an image.",
+      "Only image files are allowed.",
       true
     );
-
 
     return;
 
@@ -620,10 +525,11 @@ async function uploadPhoto(file) {
       ? file.name
           .split(".")
           .pop()
+          .toLowerCase()
       : "jpg";
 
 
-  const filePath =
+  const storagePath =
     `gallery/${crypto.randomUUID()}.${extension}`;
 
 
@@ -634,7 +540,7 @@ async function uploadPhoto(file) {
       .storage
       .from(BUCKET_NAME)
       .upload(
-        filePath,
+        storagePath,
         file
       );
 
@@ -648,7 +554,7 @@ async function uploadPhoto(file) {
 
 
     showMessage(
-      "Upload failed.",
+      "Photo upload failed.",
       true
     );
 
@@ -659,7 +565,7 @@ async function uploadPhoto(file) {
 
 
   const {
-    error: dbError
+    error: databaseError
   } =
     await supabaseClient
       .from("photos")
@@ -669,7 +575,7 @@ async function uploadPhoto(file) {
           file.name,
 
         storage_path:
-          filePath,
+          storagePath,
 
         caption:
           ""
@@ -677,11 +583,11 @@ async function uploadPhoto(file) {
       });
 
 
-  if (dbError) {
+  if (databaseError) {
 
     console.error(
-      "Database insert error:",
-      dbError
+      "Database error:",
+      databaseError
     );
 
 
@@ -689,7 +595,7 @@ async function uploadPhoto(file) {
       .storage
       .from(BUCKET_NAME)
       .remove([
-        filePath
+        storagePath
       ]);
 
 
@@ -705,7 +611,8 @@ async function uploadPhoto(file) {
 
 
   showMessage(
-    "Photo added successfully."
+    "Photo added successfully.",
+    false
   );
 
 }
@@ -713,17 +620,19 @@ async function uploadPhoto(file) {
 
 /* =====================================================
    DELETE PHOTO
-   ===================================================== */
+===================================================== */
 
 async function deletePhoto(photo) {
 
   const confirmed =
-    confirm(
+    window.confirm(
       `Delete "${photo.file_name}"?`
     );
 
 
-  if (!confirmed) return;
+  if (!confirmed) {
+    return;
+  }
 
 
   const {
@@ -757,7 +666,7 @@ async function deletePhoto(photo) {
 
 
   const {
-    error: dbError
+    error: databaseError
   } =
     await supabaseClient
       .from("photos")
@@ -768,16 +677,16 @@ async function deletePhoto(photo) {
       );
 
 
-  if (dbError) {
+  if (databaseError) {
 
     console.error(
       "Database delete error:",
-      dbError
+      databaseError
     );
 
 
     showMessage(
-      "Photo file deleted, but database cleanup failed.",
+      "Database cleanup failed.",
       true
     );
 
@@ -793,24 +702,13 @@ async function deletePhoto(photo) {
 
 
 /* =====================================================
-   PHOTO VIEWER
-   ===================================================== */
+   VIEWER
+===================================================== */
 
 function openViewer(imageUrl) {
 
-  if (
-    !viewer ||
-    !viewerImage
-  ) {
-
-    return;
-
-  }
-
-
   viewerImage.src =
     imageUrl;
-
 
   viewer.style.display =
     "flex";
@@ -820,73 +718,66 @@ function openViewer(imageUrl) {
 
 function closeViewer() {
 
-  if (!viewer) return;
-
-
   viewer.style.display =
     "none";
 
-
-  if (viewerImage) {
-
-    viewerImage.src = "";
-
-  }
+  viewerImage.src =
+    "";
 
 }
 
 
-if (viewer) {
+viewerClose.addEventListener(
+  "click",
+  closeViewer
+);
 
-  viewer.addEventListener(
-    "click",
-    (event) => {
 
-      if (
-        event.target ===
-        viewer
-      ) {
+viewer.addEventListener(
+  "click",
+  (event) => {
 
-        closeViewer();
+    if (
+      event.target === viewer
+    ) {
 
-      }
+      closeViewer();
 
     }
-  );
 
-}
+  }
+);
 
 
 /* =====================================================
-   LOCK GALLERY
-   ===================================================== */
+   LOCK
+===================================================== */
 
-async function lockGallery() {
+lockButton.addEventListener(
+  "click",
+  async () => {
 
-  await supabaseClient
-    .auth
-    .signOut();
+    await supabaseClient
+      .auth
+      .signOut();
 
 
-  closeViewer();
+    closeViewer();
 
+    showLogin();
 
-  showLogin();
-
-}
+  }
+);
 
 
 /* =====================================================
    MESSAGE
-   ===================================================== */
+===================================================== */
 
 function showMessage(
   text,
   isError = false
 ) {
-
-  if (!message) return;
-
 
   message.textContent =
     text;
@@ -898,18 +789,23 @@ function showMessage(
       : "message";
 
 
+  if (!isError) {
+
+    message.classList.add(
+      "success"
+    );
+
+  }
+
+
   setTimeout(
     () => {
 
-      if (
-        message.textContent ===
-        text
-      ) {
+      message.textContent =
+        "";
 
-        message.textContent =
-          "";
-
-      }
+      message.className =
+        "message";
 
     },
     3000
