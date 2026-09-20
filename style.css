@@ -1,0 +1,363 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, #dbeafe, transparent 35%),
+    radial-gradient(circle at bottom right, #c7d2fe, transparent 35%),
+    #f8fafc;
+  color: #172033;
+}
+
+/* ---------------- LOGIN ---------------- */
+
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: min(390px, 100%);
+  padding: 40px 28px;
+  text-align: center;
+
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 28px;
+
+  box-shadow: 0 25px 70px rgba(30, 64, 175, 0.15);
+}
+
+.lock-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eff6ff;
+  border-radius: 50%;
+  font-size: 30px;
+}
+
+.login-card h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #64748b;
+  margin-bottom: 28px;
+}
+
+/* PIN DOTS */
+
+.pin-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.pin-dots span {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #dbe3ef;
+  transition: 0.2s;
+}
+
+.pin-dots span.filled {
+  background: #2563eb;
+  transform: scale(1.15);
+}
+
+/* KEYPAD */
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.keypad button {
+  height: 58px;
+  border: none;
+  border-radius: 17px;
+
+  background: white;
+  color: #172033;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow: 0 5px 15px rgba(15,23,42,0.07);
+
+  transition: transform 0.15s, background 0.15s;
+}
+
+.keypad button:hover {
+  background: #eff6ff;
+  transform: translateY(-2px);
+}
+
+.keypad button:active {
+  transform: scale(0.94);
+}
+
+.empty-key {
+  visibility: hidden;
+}
+
+.delete-key {
+  color: #64748b !important;
+}
+
+/* UNLOCK */
+
+.unlock-button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: #2563eb;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.unlock-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.error-message {
+  min-height: 22px;
+  margin-bottom: 8px;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+/* ---------------- GALLERY ---------------- */
+
+.gallery-screen {
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.gallery-header {
+  max-width: 1200px;
+  margin: auto auto 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.gallery-header h1 {
+  font-size: 30px;
+}
+
+.gallery-header p {
+  color: #64748b;
+  margin-top: 5px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.upload-button,
+.logout-button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.upload-button {
+  background: #2563eb;
+  color: white;
+}
+
+.logout-button {
+  background: #e2e8f0;
+  color: #172033;
+}
+
+/* PHOTO GRID */
+
+.gallery {
+  max-width: 1200px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.photo-card {
+  position: relative;
+  overflow: hidden;
+
+  aspect-ratio: 1 / 1;
+
+  background: white;
+  border-radius: 18px;
+
+  box-shadow: 0 8px 25px rgba(15,23,42,0.08);
+}
+
+.photo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+
+  transition: transform 0.3s;
+}
+
+.photo-card:hover img {
+  transform: scale(1.04);
+}
+
+.delete-photo {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(0,0,0,0.65);
+  color: white;
+
+  cursor: pointer;
+}
+
+/* EMPTY */
+
+.empty-gallery {
+  text-align: center;
+  padding: 100px 20px;
+  color: #64748b;
+}
+
+.empty-gallery div {
+  font-size: 55px;
+  margin-bottom: 15px;
+}
+
+.empty-gallery h2 {
+  color: #172033;
+  margin-bottom: 8px;
+}
+
+/* VIEWER */
+
+.viewer {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.92);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+
+  z-index: 1000;
+}
+
+.viewer img {
+  max-width: 95%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.viewer-close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+
+  width: 45px;
+  height: 45px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.15);
+  color: white;
+
+  font-size: 30px;
+
+  cursor: pointer;
+}
+
+/* UTILITIES */
+
+.hidden {
+  display: none !important;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .gallery-screen {
+    padding: 18px;
+  }
+
+  .gallery-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-buttons {
+    width: 100%;
+  }
+
+  .upload-button,
+  .logout-button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .gallery-header h1 {
+    font-size: 25px;
+  }
+}

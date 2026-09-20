@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Private Gallery</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <!-- PIN SCREEN -->
+  <main id="loginScreen" class="login-screen">
+
+    <div class="login-card">
+
+      <div class="lock-icon">🔐</div>
+
+      <h1>Private Gallery</h1>
+      <p class="subtitle">Enter your PIN to continue</p>
+
+      <div id="pinDots" class="pin-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div id="errorMessage" class="error-message"></div>
+
+      <div class="keypad">
+
+        <button onclick="pressPin('1')">1</button>
+        <button onclick="pressPin('2')">2</button>
+        <button onclick="pressPin('3')">3</button>
+
+        <button onclick="pressPin('4')">4</button>
+        <button onclick="pressPin('5')">5</button>
+        <button onclick="pressPin('6')">6</button>
+
+        <button onclick="pressPin('7')">7</button>
+        <button onclick="pressPin('8')">8</button>
+        <button onclick="pressPin('9')">9</button>
+
+        <button class="empty-key"></button>
+        <button onclick="pressPin('0')">0</button>
+        <button onclick="deletePin()" class="delete-key">⌫</button>
+
+      </div>
+
+      <button id="unlockButton" onclick="unlockGallery()" class="unlock-button">
+        Unlock Gallery
+      </button>
+
+    </div>
+
+  </main>
+
+
+  <!-- GALLERY -->
+  <main id="galleryScreen" class="gallery-screen hidden">
+
+    <header class="gallery-header">
+
+      <div>
+        <h1>My Private Gallery</h1>
+        <p>Your private photos</p>
+      </div>
+
+      <div class="header-buttons">
+        <label class="upload-button">
+          + Add Photos
+          <input
+            type="file"
+            id="photoUpload"
+            accept="image/*"
+            multiple
+            onchange="uploadPhotos(event)"
+            hidden
+          >
+        </label>
+
+        <button onclick="logout()" class="logout-button">
+          Lock
+        </button>
+      </div>
+
+    </header>
+
+    <section id="gallery" class="gallery"></section>
+
+    <div id="emptyGallery" class="empty-gallery hidden">
+      <div>🖼️</div>
+      <h2>No photos yet</h2>
+      <p>Add your first private photo.</p>
+    </div>
+
+  </main>
+
+
+  <!-- PHOTO VIEWER -->
+  <div id="viewer" class="viewer hidden" onclick="closeViewer(event)">
+
+    <button class="viewer-close" onclick="closeViewer()">×</button>
+
+    <img id="viewerImage" src="" alt="Private photo">
+
+  </div>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
