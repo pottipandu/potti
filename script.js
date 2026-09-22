@@ -692,7 +692,51 @@ function showEmptyGallery() {
   }
 
 }
+/* =========================================================
+   UPLOAD PHOTOS
+   ========================================================= */
 
+async function handlePhotoUpload(event) {
+
+  const files = event.target.files;
+
+  if (!files || files.length === 0) {
+    return;
+  }
+
+  showUploadMessage("Uploading...");
+
+  try {
+
+    for (const file of files) {
+
+      await uploadPhoto(file);
+
+    }
+
+    showUploadMessage(
+      "Photos uploaded successfully."
+    );
+
+    event.target.value = "";
+
+    await loadPhotos();
+
+  } catch (error) {
+
+    console.error(
+      "Upload error:",
+      error
+    );
+
+    showUploadMessage(
+      "Upload failed.",
+      true
+    );
+
+  }
+
+}
 /* =========================================================
    CREATE PHOTO / VIDEO CARD
    ========================================================= */
