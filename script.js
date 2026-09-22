@@ -1,4 +1,4 @@
-const SUPABASE_URL = "https://supabase.com/dashboard/project/wfhyyzoxknvdpfyxxmbp";
+const SUPABASE_URL = "https://wfhyyzoxknvdpfyxxmbp.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1uO-Uv8FdiI3ol2gXZlOrQ_WnRSt1x0";
 const GALLERY_EMAIL = "taara510p@gmail.com";
 
