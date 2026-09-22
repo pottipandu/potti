@@ -1,50 +1,43 @@
+/* ==========================================
+   RESET
+   ========================================== */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+
 body {
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-
-  background:
-    linear-gradient(
-      135deg,
-      #071a36,
-      #0b2c55,
-      #123e70
-    );
-
-  color: white;
   min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #172033;
 }
 
 
-/* ================= GENERAL ================= */
-
-.screen {
-  min-height: 100vh;
-}
-
-.hidden {
-  display: none !important;
-}
-
-
-/* ================= LOGIN ================= */
+/* ==========================================
+   LOGIN SCREEN
+   ========================================== */
 
 .login-screen {
+  min-height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
   padding: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eaf3ff,
+      #f7f9fc
+    );
 }
+
 
 .login-card {
   width: 100%;
@@ -54,344 +47,494 @@ body {
 
   text-align: center;
 
-  background:
-    rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.9);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 
-  border-radius: 28px;
-
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
 
   box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.35);
+    0 20px 60px rgba(20, 50, 90, 0.12);
 }
 
+
 .lock-icon {
-  font-size: 55px;
-  margin-bottom: 20px;
+  font-size: 54px;
+  margin-bottom: 15px;
 }
+
 
 .login-card h1 {
   font-size: 30px;
   margin-bottom: 10px;
 }
 
-.subtitle {
-  color: rgba(255, 255, 255, 0.72);
-  margin-bottom: 28px;
+
+.login-subtitle {
+  color: #6d7788;
+  font-size: 15px;
+  line-height: 1.5;
+
+  margin-bottom: 25px;
 }
 
 
-/* ================= INPUT ================= */
+/* ==========================================
+   PIN INPUT
+   ========================================== */
 
-#pinInput {
+.pin-input {
   width: 100%;
 
-  padding: 16px 18px;
+  padding: 15px 16px;
 
-  border: none;
+  border: 1px solid #d7deea;
+
+  border-radius: 12px;
+
+  font-size: 18px;
+
   outline: none;
 
-  border-radius: 14px;
+  text-align: center;
 
-  background:
-    rgba(255, 255, 255, 0.12);
+  background: white;
+
+  transition: 0.2s;
+}
+
+
+.pin-input:focus {
+  border-color: #4285f4;
+
+  box-shadow:
+    0 0 0 3px rgba(66, 133, 244, 0.12);
+}
+
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.primary-button,
+.upload-button,
+.lock-button,
+.delete-button {
+  border: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s,
+    opacity 0.2s,
+    box-shadow 0.2s;
+}
+
+
+.primary-button {
+  width: 100%;
+
+  margin-top: 15px;
+
+  padding: 15px;
+
+  border-radius: 12px;
+
+  background: #2563eb;
 
   color: white;
 
   font-size: 16px;
 
-  margin-bottom: 14px;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.16);
-}
-
-#pinInput::placeholder {
-  color: rgba(255, 255, 255, 0.55);
-}
-
-#pinInput:focus {
-  border-color: rgba(255, 255, 255, 0.45);
-
-  background:
-    rgba(255, 255, 255, 0.16);
+  font-weight: 600;
 }
 
 
-/* ================= BUTTONS ================= */
+.primary-button:hover {
+  transform: translateY(-1px);
 
-button,
-.upload-button {
-  border: none;
-  cursor: pointer;
-
-  font-family: inherit;
-}
-
-.unlock-button {
-  width: 100%;
-
-  padding: 16px;
-
-  border-radius: 14px;
-
-  background: white;
-  color: #0b2c55;
-
-  font-size: 16px;
-  font-weight: 700;
-
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-}
-
-.unlock-button:hover {
-  transform: translateY(-2px);
-}
-
-.unlock-button:active {
-  transform: scale(0.98);
-}
-
-.unlock-button:disabled {
-  opacity: 0.6;
-  cursor: wait;
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.25);
 }
 
 
-/* ================= MESSAGE ================= */
+.lock-button {
+  padding: 11px 16px;
 
-.message {
+  border-radius: 10px;
+
+  background: #eef3f9;
+
+  color: #24324a;
+
+  font-weight: 600;
+}
+
+
+.lock-button:hover {
+  background: #e3eaf3;
+}
+
+
+/* ==========================================
+   MESSAGES
+   ========================================== */
+
+.message,
+.upload-message {
   min-height: 22px;
 
-  margin-top: 14px;
+  margin-top: 12px;
 
   font-size: 14px;
 
-  color:
-    rgba(255, 255, 255, 0.8);
+  color: #667085;
 }
 
 
-/* ================= GALLERY ================= */
+.error {
+  color: #dc2626 !important;
+}
+
+
+/* ==========================================
+   GALLERY SCREEN
+   ========================================== */
 
 .gallery-screen {
-  padding: 25px;
+  display: none;
+
+  min-height: 100vh;
+
+  padding-bottom: 50px;
 }
 
+
+/* ==========================================
+   HEADER
+   ========================================== */
+
 .gallery-header {
-  max-width: 1200px;
+  width: min(1200px, 92%);
 
-  margin:
-    0 auto 30px;
+  margin: 0 auto;
 
-  padding:
-    22px 25px;
+  padding: 30px 0;
 
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 20px;
-
-  background:
-    rgba(255, 255, 255, 0.09);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.14);
-
-  border-radius: 22px;
-
-  backdrop-filter: blur(18px);
 }
+
 
 .gallery-header h1 {
-  font-size: 28px;
-  margin-bottom: 5px;
+  font-size: 30px;
+
+  margin-bottom: 6px;
 }
+
 
 .gallery-header p {
-  color:
-    rgba(255, 255, 255, 0.65);
+  color: #718096;
+
+  font-size: 14px;
 }
 
 
-/* ================= LOCK BUTTON ================= */
-
-.lock-button {
-  padding:
-    11px 17px;
-
-  border-radius: 12px;
-
-  background:
-    rgba(255, 255, 255, 0.12);
-
-  color: white;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.15);
-
-  transition:
-    background 0.2s;
-}
-
-.lock-button:hover {
-  background:
-    rgba(255, 255, 255, 0.20);
-}
-
-
-/* ================= CONTAINER ================= */
-
-.gallery-container {
-  max-width: 1200px;
-  margin: auto;
-}
-
-
-/* ================= UPLOAD ================= */
+/* ==========================================
+   UPLOAD SECTION
+   ========================================== */
 
 .upload-section {
-  margin-bottom: 30px;
-}
+  width: min(1200px, 92%);
 
-.upload-button {
-  display: inline-flex;
+  margin: 0 auto 30px;
 
-  align-items: center;
-  justify-content: center;
+  padding: 22px;
 
-  padding:
-    13px 20px;
-
-  border-radius: 13px;
-
-  background: white;
-  color: #0b2c55;
-
-  font-weight: 700;
-
-  transition:
-    transform 0.2s;
-}
-
-.upload-button:hover {
-  transform: translateY(-2px);
-}
-
-
-/* ================= EMPTY ================= */
-
-.empty-gallery {
   text-align: center;
 
-  padding:
-    80px 20px;
-
-  color:
-    rgba(255, 255, 255, 0.65);
-}
-
-.empty-icon {
-  font-size: 60px;
-  margin-bottom: 15px;
-}
-
-.empty-gallery h2 {
-  color: white;
-  margin-bottom: 8px;
-}
-
-
-/* ================= GRID ================= */
-
-.photo-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fill, minmax(220px, 1fr));
-
-  gap: 18px;
-}
-
-
-/* ================= PHOTO CARD ================= */
-
-.photo-card {
-  position: relative;
-
-  overflow: hidden;
-
-  aspect-ratio: 1 / 1;
+  background: white;
 
   border-radius: 18px;
 
-  background:
-    rgba(255, 255, 255, 0.08);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.12);
-
-  cursor: pointer;
+  border: 1px solid #e5eaf1;
 
   box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.20);
+    0 8px 30px rgba(20, 40, 70, 0.05);
 }
 
-.photo-card img {
+
+.upload-button {
+  display: inline-block;
+
+  padding: 13px 22px;
+
+  border-radius: 12px;
+
+  background: #2563eb;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+.upload-button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+
+/* ==========================================
+   GALLERY GRID
+   ========================================== */
+
+.gallery-grid {
+  width: min(1200px, 92%);
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(220px, 1fr)
+    );
+
+  gap: 20px;
+}
+
+
+/* ==========================================
+   PHOTO CARD
+   ========================================== */
+
+.photo-card {
+  overflow: hidden;
+
+  background: white;
+
+  border-radius: 16px;
+
+  border: 1px solid #e4e9f0;
+
+  box-shadow:
+    0 8px 25px rgba(20, 40, 70, 0.06);
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+
+.photo-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 14px 35px rgba(20, 40, 70, 0.1);
+}
+
+
+/* ==========================================
+   MEDIA WRAPPER
+   ========================================== */
+
+.media-wrapper {
   width: 100%;
+
+  height: 230px;
+
+  background: #eef2f7;
+
+  overflow: hidden;
+
+  cursor: pointer;
+}
+
+
+.media-wrapper img,
+.media-wrapper video {
+  width: 100%;
+
   height: 100%;
 
   object-fit: cover;
 
   display: block;
-
-  transition:
-    transform 0.35s;
-}
-
-.photo-card:hover img {
-  transform: scale(1.05);
 }
 
 
-/* ================= DELETE ================= */
+.media-wrapper video {
+  cursor: default;
+}
+
+
+/* ==========================================
+   CARD INFO
+   ========================================== */
+
+.photo-card-info {
+  min-height: 58px;
+
+  padding: 10px 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+
+.file-name {
+  flex: 1;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 13px;
+
+  color: #566174;
+}
+
 
 .delete-button {
-  position: absolute;
+  flex-shrink: 0;
 
-  top: 10px;
-  right: 10px;
+  padding: 7px 10px;
 
-  width: 36px;
-  height: 36px;
+  border-radius: 8px;
 
-  border-radius: 50%;
+  background: #fff0f0;
 
-  background:
-    rgba(0, 0, 0, 0.65);
+  color: #dc2626;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+.delete-button:hover {
+  background: #ffe0e0;
+}
+
+
+/* ==========================================
+   HEIC / OTHER FILES
+   ========================================== */
+
+.unsupported-file {
+  height: 230px;
+
+  padding: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  text-align: center;
+
+  background: #f7f9fc;
+
+  color: #566174;
+}
+
+
+.unsupported-file > div:first-child {
+  font-size: 42px;
+}
+
+
+.unsupported-file strong {
+  color: #27344a;
+
+  font-size: 16px;
+}
+
+
+.unsupported-file span {
+  max-width: 90%;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 12px;
+}
+
+
+.unsupported-file a {
+  margin-top: 5px;
+
+  padding: 8px 13px;
+
+  border-radius: 8px;
+
+  background: #2563eb;
 
   color: white;
 
-  font-size: 18px;
+  text-decoration: none;
 
-  z-index: 5;
-}
+  font-size: 12px;
 
-.delete-button:hover {
-  background:
-    rgba(200, 30, 30, 0.85);
+  font-weight: 600;
 }
 
 
-/* ================= VIEWER ================= */
+/* ==========================================
+   EMPTY GALLERY
+   ========================================== */
+
+.empty-gallery {
+  grid-column: 1 / -1;
+
+  padding: 70px 20px;
+
+  text-align: center;
+
+  color: #718096;
+}
+
+
+.empty-gallery h3 {
+  margin: 12px 0 6px;
+
+  color: #27344a;
+}
+
+
+/* ==========================================
+   FULLSCREEN VIEWER
+   ========================================== */
 
 .viewer {
   position: fixed;
@@ -403,114 +546,120 @@ button,
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 30px;
 
-  background:
-    rgba(0, 0, 0, 0.88);
-
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.9);
 }
 
-.viewer img {
+
+.viewer-media {
   max-width: 95vw;
+
   max-height: 90vh;
 
   object-fit: contain;
 
-  border-radius: 12px;
-
-  box-shadow:
-    0 20px 70px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
 }
+
 
 .viewer-close {
   position: absolute;
 
   top: 20px;
+
   right: 25px;
 
+  z-index: 10000;
+
   width: 45px;
+
   height: 45px;
+
+  border: none;
 
   border-radius: 50%;
 
-  background:
-    rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
 
   color: white;
 
-  font-size: 30px;
+  font-size: 32px;
 
-  z-index: 10;
+  line-height: 1;
+
+  cursor: pointer;
 }
 
 
-/* ================= MOBILE ================= */
+.viewer-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+
+/* ==========================================
+   MOBILE
+   ========================================== */
 
 @media (max-width: 600px) {
 
   .login-card {
-    padding: 32px 22px;
+    padding: 30px 20px;
   }
 
-  .gallery-screen {
-    padding: 15px;
-  }
 
   .gallery-header {
-    padding: 18px;
-
-    align-items: flex-start;
+    padding-top: 20px;
 
     flex-direction: column;
+
+    align-items: flex-start;
   }
+
 
   .gallery-header h1 {
-    font-size: 23px;
+    font-size: 25px;
   }
 
-  .photo-grid {
+
+  .lock-button {
+    align-self: stretch;
+  }
+
+
+  .gallery-grid {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(2, minmax(0, 1fr));
 
     gap: 10px;
   }
 
-  .photo-card {
-    border-radius: 12px;
+
+  .media-wrapper,
+  .unsupported-file {
+    height: 170px;
   }
 
-}
-.photo-card video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
 
-.unsupported-file {
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-  padding: 20px;
-}
+  .photo-card-info {
+    padding: 8px;
 
-.unsupported-file > div:first-child {
-  font-size: 42px;
-}
+    display: block;
+  }
 
-.unsupported-file a {
-  text-decoration: none;
-}
 
-.viewer-media {
-  max-width: 95vw;
-  max-height: 90vh;
-  object-fit: contain;
+  .file-name {
+    display: block;
+
+    margin-bottom: 7px;
+  }
+
+
+  .delete-button {
+    width: 100%;
+  }
+
 }
