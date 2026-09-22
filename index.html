@@ -18,43 +18,43 @@
 
 <body>
 
-  <!-- ================= LOGIN PAGE ================= -->
+  <!-- ==========================================
+       LOGIN SCREEN
+       ========================================== -->
 
-  <section id="loginScreen" class="screen login-screen">
+  <section id="loginScreen" class="login-screen">
 
     <div class="login-card">
 
-      <div class="lock-icon">🔐</div>
+      <div class="lock-icon">
+        🔐
+      </div>
 
       <h1>Private Gallery</h1>
 
-      <p class="subtitle">
-        Enter your password to continue
+      <p class="login-subtitle">
+        Enter your PIN to access your private gallery.
       </p>
 
-      <form
-        id="loginForm"
-        onsubmit="event.preventDefault(); unlockGallery();"
+
+      <input
+        type="password"
+        id="pinInput"
+        class="pin-input"
+        placeholder="Enter PIN"
+        autocomplete="off"
+        inputmode="numeric"
       >
 
-        <input
-          id="pinInput"
-          type="password"
-          placeholder="Enter PIN"
-          autocomplete="off"
-          maxlength="100"
-          spellcheck="false"
-        >
 
-        <button
-          id="unlockButton"
-          type="submit"
-          class="unlock-button"
-        >
-          Unlock Gallery
-        </button>
+      <button
+        id="pinButton"
+        class="primary-button"
+        type="button"
+      >
+        Unlock Gallery
+      </button>
 
-      </form>
 
       <p id="loginMessage" class="message"></p>
 
@@ -63,22 +63,30 @@
   </section>
 
 
-  <!-- ================= GALLERY PAGE ================= -->
+  <!-- ==========================================
+       GALLERY SCREEN
+       ========================================== -->
 
-  <section id="galleryScreen" class="screen gallery-screen hidden">
+  <section id="galleryScreen" class="gallery-screen">
+
+    <!-- HEADER -->
 
     <header class="gallery-header">
 
       <div>
+
         <h1>My Private Gallery</h1>
 
         <p>
-          Your photos are stored privately.
+          Your photos and videos
         </p>
+
       </div>
+
 
       <button
         class="lock-button"
+        type="button"
         onclick="lockGallery()"
       >
         🔒 Lock
@@ -87,52 +95,39 @@
     </header>
 
 
-    <main class="gallery-container">
+    <!-- UPLOAD AREA -->
 
-      <!-- Upload area -->
+    <div class="upload-section">
 
-      <div class="upload-section">
-
-        <label for="photoInput" class="upload-button">
-  📸 Add Photos & Videos
-</label>
-
-<input
-  type="file"
-  id="photoInput"
-  accept=".jpg,.jpeg,.png,.webp,.heic,.heif,.mp4,.webm,.mov,video/*"
-  multiple
-  hidden
->
-
-<p id="uploadMessage"></p>
-
-      </div>
+      <label
+        for="photoInput"
+        class="upload-button"
+      >
+        📸 Add Photos & Videos
+      </label>
 
 
-      <!-- Empty gallery -->
-
-      <div
-        id="emptyGallery"
-        class="empty-gallery"
+      <input
+        type="file"
+        id="photoInput"
+        accept=".jpg,.jpeg,.png,.webp,.heic,.heif,.mp4,.webm,.mov,video/*"
+        multiple
+        hidden
       >
 
-        <div class="empty-icon">📷</div>
 
-        <h2>Your gallery is empty</h2>
+      <p id="uploadMessage" class="upload-message"></p>
 
-        <p>
-          Add your first photo to get started.
-        </p>
-
-      </div>
+    </div>
 
 
-      <!-- Photo grid -->
+    <!-- GALLERY -->
+
+    <main>
 
       <div
-        id="photoGrid"
-        class="photo-grid"
+        id="galleryGrid"
+        class="gallery-grid"
       ></div>
 
     </main>
@@ -140,34 +135,22 @@
   </section>
 
 
-  <!-- ================= PHOTO VIEWER ================= -->
+  <!-- ==========================================
+       FULLSCREEN VIEWER
+       ========================================== -->
 
   <div
     id="viewer"
-    class="viewer hidden"
-    onclick="closeViewer()"
-  >
-
-    <button
-      class="viewer-close"
-      onclick="closeViewer()"
-    >
-      ×
-    </button>
-
-    <img
-      id="viewerImage"
-      src=""
-      alt="Photo"
-      onclick="event.stopPropagation()"
-    >
-
-  </div>
+    class="viewer"
+    style="display: none;"
+  ></div>
 
 
-  <!-- IMPORTANT:
-       Cache-busting version number -->
-  <script src="script.js?v=5"></script>
+  <!-- ==========================================
+       JAVASCRIPT
+       ========================================== -->
+
+  <script src="script.js?v=6"></script>
 
 </body>
 </html>
