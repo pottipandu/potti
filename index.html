@@ -28,7 +28,7 @@
         Enter your password to continue
       </p>
 
-      <form id="loginForm">
+      <form id="loginForm" onsubmit="event.preventDefault(); unlockGallery();">
 
         <input
           id="pinInput"
