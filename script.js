@@ -693,14 +693,11 @@ function showEmptyGallery() {
 
 }
 
-
 /* =========================================================
-   CREATE PHOTO CARD
+   CREATE PHOTO / VIDEO CARD
    ========================================================= */
 
-async function createPhotoCard(
-  photo
-) {
+async function createPhotoCard(photo) {
 
   try {
 
@@ -716,7 +713,6 @@ async function createPhotoCard(
           SIGNED_URL_SECONDS
         );
 
-
     if (error) {
 
       console.error(
@@ -728,7 +724,6 @@ async function createPhotoCard(
 
     }
 
-
     if (
       !data ||
       !data.signedUrl
@@ -738,70 +733,255 @@ async function createPhotoCard(
 
     }
 
-
     const card =
-      document.createElement(
-        "div"
-      );
-
+      document.createElement("div");
 
     card.className =
       "photo-card";
 
 
-    const image =
-      document.createElement(
-        "img"
+    /* -------------------------------------------------------
+       FILE TYPE
+       ------------------------------------------------------- */
+
+    const fileName =
+      photo.file_name ||
+      photo.storage_path ||
+      "";
+
+    const extension =
+      fileName
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+
+    const imageExtensions = [
+      "jpg",
+      "jpeg",
+      "png",
+      "webp"
+    ];
+
+    const videoExtensions = [
+      "mp4",
+      "webm",
+      "mov"
+    ];
+
+    const heicExtensions = [
+      "heic",
+      "heif"
+    ];
+
+
+    /* -------------------------------------------------------
+       IMAGE
+       ------------------------------------------------------- */
+
+    if (
+      imageExtensions.includes(extension)
+    ) {
+
+      const image =
+        document.createElement("img");
+
+      image.src =
+        data.signedUrl;
+
+      image.alt =
+        photo.caption ||
+        photo.file_name ||
+        "Private photo";
+
+      image.loading =
+        "lazy";
+
+      image.addEventListener(
+        "click",
+        () => {
+
+          openViewer(
+            data.signedUrl,
+            "image"
+          );
+
+        }
       );
 
+      card.appendChild(image);
 
-    image.src =
-      data.signedUrl;
-
-
-    image.alt =
-      photo.caption ||
-      photo.file_name ||
-      "Private photo";
+    }
 
 
-    image.loading =
-      "lazy";
+    /* -------------------------------------------------------
+       VIDEO
+       ------------------------------------------------------- */
+
+    else if (
+      videoExtensions.includes(extension)
+    ) {
+
+      const video =
+        document.createElement("video");
+
+      video.src =
+        data.signedUrl;
+
+      video.controls =
+        true;
+
+      video.preload =
+        "metadata";
+
+      video.playsInline =
+        true;
+
+      video.addEventListener(
+        "click",
+        (event) => {
+
+          event.stopPropagation();
+
+          openViewer(
+            data.signedUrl,
+            "video"
+          );
+
+        }
+      );
+
+      card.appendChild(video);
+
+    }
 
 
-    image.addEventListener(
-      "click",
-      () => {
+    /* -------------------------------------------------------
+       HEIC / HEIF
+       ------------------------------------------------------- */
 
-        openViewer(
-          data.signedUrl
-        );
+    else if (
+      heicExtensions.includes(extension)
+    ) {
 
-      }
-    );
+      const heicBox =
+        document.createElement("div");
+
+      heicBox.className =
+        "unsupported-file";
 
 
-    card.appendChild(
-      image
-    );
+      const icon =
+        document.createElement("div");
 
+      icon.textContent =
+        "📷";
+
+
+      const title =
+        document.createElement("strong");
+
+      title.textContent =
+        "HEIC Photo";
+
+
+      const download =
+        document.createElement("a");
+
+      download.href =
+        data.signedUrl;
+
+      download.textContent =
+        "Open / Download";
+
+      download.target =
+        "_blank";
+
+      download.rel =
+        "noopener";
+
+
+      heicBox.appendChild(icon);
+      heicBox.appendChild(title);
+      heicBox.appendChild(download);
+
+      card.appendChild(
+        heicBox
+      );
+
+    }
+
+
+    /* -------------------------------------------------------
+       OTHER FILE
+       ------------------------------------------------------- */
+
+    else {
+
+      const fileBox =
+        document.createElement("div");
+
+      fileBox.className =
+        "unsupported-file";
+
+
+      const icon =
+        document.createElement("div");
+
+      icon.textContent =
+        "📁";
+
+
+      const title =
+        document.createElement("strong");
+
+      title.textContent =
+        photo.file_name ||
+        "File";
+
+
+      const open =
+        document.createElement("a");
+
+      open.href =
+        data.signedUrl;
+
+      open.textContent =
+        "Open file";
+
+      open.target =
+        "_blank";
+
+      open.rel =
+        "noopener";
+
+
+      fileBox.appendChild(icon);
+      fileBox.appendChild(title);
+      fileBox.appendChild(open);
+
+      card.appendChild(
+        fileBox
+      );
+
+    }
+
+
+    /* -------------------------------------------------------
+       DELETE BUTTON
+       ------------------------------------------------------- */
 
     const deleteButton =
-      document.createElement(
-        "button"
-      );
-
+      document.createElement("button");
 
     deleteButton.className =
       "delete-button";
 
-
     deleteButton.innerHTML =
       "×";
 
-
     deleteButton.title =
-      "Delete photo";
+      "Delete file";
 
 
     deleteButton.addEventListener(
@@ -823,15 +1003,18 @@ async function createPhotoCard(
     );
 
 
-    photoGrid.appendChild(
-      card
-    );
+    if (photoGrid) {
 
+      photoGrid.appendChild(
+        card
+      );
+
+    }
 
   } catch (error) {
 
     console.error(
-      "Photo card error:",
+      "File card error:",
       error
     );
 
@@ -839,303 +1022,86 @@ async function createPhotoCard(
 
 }
 
-
 /* =========================================================
-   UPLOAD PHOTOS
-   ========================================================= */
-
-async function handlePhotoUpload(
-  event
-) {
-
-  const files =
-    event.target.files;
-
-
-  if (
-    !files ||
-    files.length === 0
-  ) {
-
-    return;
-
-  }
-
-
-  showUploadMessage(
-    "Uploading..."
-  );
-
-
-  try {
-
-    for (
-      const file
-      of files
-    ) {
-
-      await uploadPhoto(
-        file
-      );
-
-    }
-
-
-    showUploadMessage(
-      "Photos uploaded successfully."
-    );
-
-
-    event.target.value = "";
-
-
-    await loadPhotos();
-
-
-  } catch (error) {
-
-    console.error(
-      "Upload error:",
-      error
-    );
-
-
-    showUploadMessage(
-      "Upload failed.",
-      true
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   UPLOAD SINGLE PHOTO
-   ========================================================= */
-
-async function uploadPhoto(
-  file
-) {
-
-  const timestamp =
-    Date.now();
-
-
-  const random =
-    Math.random()
-      .toString(36)
-      .substring(2, 10);
-
-
-  const safeName =
-    file.name
-      .replace(
-        /[^a-zA-Z0-9._-]/g,
-        "_"
-      );
-
-
-  const storagePath =
-    `${timestamp}_${random}_${safeName}`;
-
-
-  console.log(
-    "Uploading:",
-    storagePath
-  );
-
-
-  const {
-    error: uploadError
-  } =
-    await supabaseClient
-      .storage
-      .from(BUCKET_NAME)
-      .upload(
-        storagePath,
-        file
-      );
-
-
-  if (uploadError) {
-
-    console.error(
-      "Storage upload error:",
-      uploadError
-    );
-
-    throw uploadError;
-
-  }
-
-
-  const {
-    error: databaseError
-  } =
-    await supabaseClient
-      .from("photos")
-      .insert(
-        {
-          file_name:
-            file.name,
-
-          storage_path:
-            storagePath,
-
-          caption:
-            ""
-        }
-      );
-
-
-  if (databaseError) {
-
-    console.error(
-      "Database insert error:",
-      databaseError
-    );
-
-
-    /*
-      If database insertion fails,
-      remove the uploaded file so
-      we don't leave an orphan file.
-    */
-
-    await supabaseClient
-      .storage
-      .from(BUCKET_NAME)
-      .remove(
-        [
-          storagePath
-        ]
-      );
-
-
-    throw databaseError;
-
-  }
-
-}
-
-
-/* =========================================================
-   DELETE PHOTO
-   ========================================================= */
-
-async function deletePhoto(
-  photo
-) {
-
-  const confirmed =
-    confirm(
-      "Delete this photo?"
-    );
-
-
-  if (!confirmed) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const {
-      error: storageError
-    } =
-      await supabaseClient
-        .storage
-        .from(BUCKET_NAME)
-        .remove(
-          [
-            photo.storage_path
-          ]
-        );
-
-
-    if (storageError) {
-
-      console.error(
-        "Storage delete error:",
-        storageError
-      );
-
-      alert(
-        "Could not delete the photo file."
-      );
-
-      return;
-
-    }
-
-
-    const {
-      error: databaseError
-    } =
-      await supabaseClient
-        .from("photos")
-        .delete()
-        .eq(
-          "id",
-          photo.id
-        );
-
-
-    if (databaseError) {
-
-      console.error(
-        "Database delete error:",
-        databaseError
-      );
-
-      alert(
-        "Photo file deleted, but database record could not be removed."
-      );
-
-      return;
-
-    }
-
-
-    await loadPhotos();
-
-
-  } catch (error) {
-
-    console.error(
-      "Delete error:",
-      error
-    );
-
-    alert(
-      "Could not delete photo."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   PHOTO VIEWER
+   OPEN VIEWER
    ========================================================= */
 
 function openViewer(
-  imageUrl
+  fileUrl,
+  type = "image"
 ) {
 
-  if (!viewer || !viewerImage) {
-
+  if (!viewer) {
     return;
-
   }
 
 
-  viewerImage.src =
-    imageUrl;
+  viewer.innerHTML = "";
+
+
+  const closeButton =
+    document.createElement("button");
+
+  closeButton.className =
+    "viewer-close";
+
+  closeButton.textContent =
+    "×";
+
+  closeButton.addEventListener(
+    "click",
+    closeViewer
+  );
+
+
+  viewer.appendChild(
+    closeButton
+  );
+
+
+  if (type === "video") {
+
+    const video =
+      document.createElement("video");
+
+    video.src =
+      fileUrl;
+
+    video.controls =
+      true;
+
+    video.autoplay =
+      true;
+
+    video.playsInline =
+      true;
+
+    video.className =
+      "viewer-media";
+
+    viewer.appendChild(
+      video
+    );
+
+  } else {
+
+    const image =
+      document.createElement("img");
+
+    image.src =
+      fileUrl;
+
+    image.className =
+      "viewer-media";
+
+    image.alt =
+      "Private photo";
+
+    viewer.appendChild(
+      image
+    );
+
+  }
 
 
   viewer.classList.remove(
@@ -1147,8 +1113,6 @@ function openViewer(
     "hidden";
 
 }
-
-
 /* =========================================================
    CLOSE VIEWER
    ========================================================= */
@@ -1156,9 +1120,7 @@ function openViewer(
 function closeViewer() {
 
   if (!viewer) {
-
     return;
-
   }
 
 
@@ -1167,19 +1129,14 @@ function closeViewer() {
   );
 
 
-  if (viewerImage) {
-
-    viewerImage.src = "";
-
-  }
+  viewer.innerHTML =
+    "";
 
 
   document.body.style.overflow =
     "";
 
 }
-
-
 /* =========================================================
    LOCK GALLERY
    ========================================================= */
