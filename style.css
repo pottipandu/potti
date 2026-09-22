@@ -1,5 +1,6 @@
 /* ==========================================
-   RESET
+   PRIVATE GALLERY
+   CLEAN ORGANIZED UI
    ========================================== */
 
 * {
@@ -8,17 +9,20 @@
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f4f7fb;
+  background: #f5f7fb;
   color: #172033;
 }
 
 
 /* ==========================================
-   LOGIN SCREEN
+   LOGIN
    ========================================== */
 
 .login-screen {
@@ -38,77 +42,73 @@ body {
     );
 }
 
-
 .login-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
 
   padding: 40px 30px;
 
   text-align: center;
 
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.94);
 
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid #e4e9f0;
 
   border-radius: 24px;
 
   box-shadow:
-    0 20px 60px rgba(20, 50, 90, 0.12);
+    0 20px 60px rgba(20, 40, 80, 0.12);
 }
-
 
 .lock-icon {
-  font-size: 54px;
-  margin-bottom: 15px;
+  font-size: 52px;
+  margin-bottom: 14px;
 }
-
 
 .login-card h1 {
-  font-size: 30px;
-  margin-bottom: 10px;
+  font-size: 29px;
+  margin-bottom: 8px;
 }
 
-
 .login-subtitle {
-  color: #6d7788;
-  font-size: 15px;
+  color: #737d8f;
+  font-size: 14px;
   line-height: 1.5;
-
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 }
 
 
 /* ==========================================
-   PIN INPUT
+   PIN
    ========================================== */
 
 .pin-input {
   width: 100%;
 
-  padding: 15px 16px;
+  padding: 15px;
 
-  border: 1px solid #d7deea;
+  border: 1px solid #d8dee8;
 
   border-radius: 12px;
 
-  font-size: 18px;
-
   outline: none;
+
+  background: white;
+
+  color: #172033;
 
   text-align: center;
 
-  background: white;
+  font-size: 18px;
 
   transition: 0.2s;
 }
 
-
 .pin-input:focus {
-  border-color: #4285f4;
+  border-color: #2563eb;
 
   box-shadow:
-    0 0 0 3px rgba(66, 133, 244, 0.12);
+    0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 
@@ -116,27 +116,14 @@ body {
    BUTTONS
    ========================================== */
 
-.primary-button,
-.upload-button,
-.lock-button,
-.delete-button {
-  border: none;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s,
-    opacity 0.2s,
-    box-shadow 0.2s;
-}
-
-
 .primary-button {
   width: 100%;
 
-  margin-top: 15px;
+  margin-top: 14px;
 
-  padding: 15px;
+  padding: 14px;
+
+  border: none;
 
   border-radius: 12px;
 
@@ -144,35 +131,43 @@ body {
 
   color: white;
 
-  font-size: 16px;
+  font-size: 15px;
 
   font-weight: 600;
-}
 
+  cursor: pointer;
+
+  transition: 0.2s;
+}
 
 .primary-button:hover {
-  transform: translateY(-1px);
+  background: #1d4ed8;
 
-  box-shadow:
-    0 8px 20px rgba(37, 99, 235, 0.25);
+  transform: translateY(-1px);
 }
 
-
 .lock-button {
-  padding: 11px 16px;
+  padding: 10px 15px;
+
+  border: none;
 
   border-radius: 10px;
 
-  background: #eef3f9;
+  background: #edf2f8;
 
-  color: #24324a;
+  color: #26354c;
+
+  font-size: 14px;
 
   font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
 }
 
-
 .lock-button:hover {
-  background: #e3eaf3;
+  background: #e2e8f0;
 }
 
 
@@ -182,15 +177,14 @@ body {
 
 .message,
 .upload-message {
-  min-height: 22px;
+  min-height: 20px;
 
-  margin-top: 12px;
+  margin-top: 11px;
 
-  font-size: 14px;
+  font-size: 13px;
 
   color: #667085;
 }
-
 
 .error {
   color: #dc2626 !important;
@@ -198,7 +192,7 @@ body {
 
 
 /* ==========================================
-   GALLERY SCREEN
+   GALLERY
    ========================================== */
 
 .gallery-screen {
@@ -206,7 +200,7 @@ body {
 
   min-height: 100vh;
 
-  padding-bottom: 50px;
+  padding-bottom: 60px;
 }
 
 
@@ -215,11 +209,11 @@ body {
    ========================================== */
 
 .gallery-header {
-  width: min(1200px, 92%);
+  width: min(1250px, 94%);
 
-  margin: 0 auto;
+  margin: auto;
 
-  padding: 30px 0;
+  padding: 28px 0 20px;
 
   display: flex;
 
@@ -230,69 +224,86 @@ body {
   gap: 20px;
 }
 
-
 .gallery-header h1 {
-  font-size: 30px;
+  font-size: 28px;
 
-  margin-bottom: 6px;
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
 }
 
-
 .gallery-header p {
-  color: #718096;
+  margin-top: 5px;
+
+  color: #7a8495;
 
   font-size: 14px;
 }
 
 
 /* ==========================================
-   UPLOAD SECTION
+   UPLOAD BAR
    ========================================== */
 
 .upload-section {
-  width: min(1200px, 92%);
+  width: min(1250px, 94%);
 
-  margin: 0 auto 30px;
+  margin: 0 auto 25px;
 
-  padding: 22px;
+  padding: 18px 20px;
 
-  text-align: center;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
 
   background: white;
 
-  border-radius: 18px;
+  border: 1px solid #e5e9f0;
 
-  border: 1px solid #e5eaf1;
+  border-radius: 14px;
 
   box-shadow:
-    0 8px 30px rgba(20, 40, 70, 0.05);
+    0 5px 20px rgba(20, 40, 70, 0.04);
 }
 
-
 .upload-button {
-  display: inline-block;
+  display: inline-flex;
 
-  padding: 13px 22px;
+  align-items: center;
 
-  border-radius: 12px;
+  justify-content: center;
+
+  padding: 11px 17px;
+
+  border-radius: 10px;
 
   background: #2563eb;
 
   color: white;
 
-  font-size: 15px;
+  font-size: 14px;
 
   font-weight: 600;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
-
 .upload-button:hover {
-  transform: translateY(-1px);
+  background: #1d4ed8;
 
-  box-shadow:
-    0 8px 20px rgba(37, 99, 235, 0.2);
+  transform: translateY(-1px);
+}
+
+.upload-message {
+  margin: 0;
+
+  min-height: auto;
 }
 
 
@@ -301,9 +312,9 @@ body {
    ========================================== */
 
 .gallery-grid {
-  width: min(1200px, 92%);
+  width: min(1250px, 94%);
 
-  margin: 0 auto;
+  margin: auto;
 
   display: grid;
 
@@ -313,56 +324,60 @@ body {
       minmax(220px, 1fr)
     );
 
-  gap: 20px;
+  gap: 18px;
+
+  align-items: start;
 }
 
 
 /* ==========================================
-   PHOTO CARD
+   CARD
    ========================================== */
 
 .photo-card {
+  position: relative;
+
   overflow: hidden;
 
   background: white;
 
-  border-radius: 16px;
+  border: 1px solid #e3e7ee;
 
-  border: 1px solid #e4e9f0;
+  border-radius: 14px;
 
   box-shadow:
-    0 8px 25px rgba(20, 40, 70, 0.06);
+    0 4px 18px rgba(20, 40, 70, 0.06);
 
   transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
-
 
 .photo-card:hover {
   transform: translateY(-3px);
 
   box-shadow:
-    0 14px 35px rgba(20, 40, 70, 0.1);
+    0 10px 28px rgba(20, 40, 70, 0.11);
 }
 
 
 /* ==========================================
-   MEDIA WRAPPER
+   MEDIA
    ========================================== */
 
 .media-wrapper {
+  position: relative;
+
   width: 100%;
 
-  height: 230px;
-
-  background: #eef2f7;
+  aspect-ratio: 4 / 3;
 
   overflow: hidden;
 
+  background: #edf1f6;
+
   cursor: pointer;
 }
-
 
 .media-wrapper img,
 .media-wrapper video {
@@ -370,35 +385,48 @@ body {
 
   height: 100%;
 
-  object-fit: cover;
-
   display: block;
+
+  object-fit: cover;
 }
 
+.media-wrapper img {
+  transition: transform 0.35s ease;
+}
 
-.media-wrapper video {
-  cursor: default;
+.photo-card:hover .media-wrapper img {
+  transform: scale(1.025);
 }
 
 
 /* ==========================================
-   CARD INFO
+   VIDEO
+   ========================================== */
+
+.media-wrapper video {
+  cursor: default;
+
+  background: #101010;
+}
+
+
+/* ==========================================
+   CARD INFORMATION
    ========================================== */
 
 .photo-card-info {
-  min-height: 58px;
+  min-height: 50px;
 
-  padding: 10px 12px;
+  padding: 10px 11px;
 
   display: flex;
 
   align-items: center;
 
-  justify-content: space-between;
+  gap: 8px;
 
-  gap: 10px;
+  background: white;
 }
-
 
 .file-name {
   flex: 1;
@@ -407,44 +435,55 @@ body {
 
   overflow: hidden;
 
-  text-overflow: ellipsis;
-
   white-space: nowrap;
 
-  font-size: 13px;
+  text-overflow: ellipsis;
 
-  color: #566174;
-}
-
-
-.delete-button {
-  flex-shrink: 0;
-
-  padding: 7px 10px;
-
-  border-radius: 8px;
-
-  background: #fff0f0;
-
-  color: #dc2626;
+  color: #4d586a;
 
   font-size: 12px;
-
-  font-weight: 600;
-}
-
-
-.delete-button:hover {
-  background: #ffe0e0;
 }
 
 
 /* ==========================================
-   HEIC / OTHER FILES
+   DELETE
+   ========================================== */
+
+.delete-button {
+  flex-shrink: 0;
+
+  padding: 6px 9px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #fff1f1;
+
+  color: #dc2626;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.delete-button:hover {
+  background: #ffe1e1;
+}
+
+
+/* ==========================================
+   HEIC / OTHER FILE
    ========================================== */
 
 .unsupported-file {
-  height: 230px;
+  width: 100%;
+
+  aspect-ratio: 4 / 3;
 
   padding: 20px;
 
@@ -456,30 +495,32 @@ body {
 
   justify-content: center;
 
-  gap: 9px;
+  gap: 8px;
 
   text-align: center;
 
-  background: #f7f9fc;
+  background:
+    linear-gradient(
+      135deg,
+      #f5f7fa,
+      #e9eef5
+    );
 
-  color: #566174;
+  color: #657084;
 }
-
 
 .unsupported-file > div:first-child {
-  font-size: 42px;
+  font-size: 38px;
 }
-
 
 .unsupported-file strong {
-  color: #27344a;
+  color: #303b4d;
 
-  font-size: 16px;
+  font-size: 14px;
 }
 
-
 .unsupported-file span {
-  max-width: 90%;
+  width: 90%;
 
   overflow: hidden;
 
@@ -487,16 +528,15 @@ body {
 
   white-space: nowrap;
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
-
 .unsupported-file a {
-  margin-top: 5px;
+  margin-top: 3px;
 
-  padding: 8px 13px;
+  padding: 7px 11px;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
   background: #2563eb;
 
@@ -504,9 +544,13 @@ body {
 
   text-decoration: none;
 
-  font-size: 12px;
+  font-size: 11px;
 
   font-weight: 600;
+}
+
+.unsupported-file a:hover {
+  background: #1d4ed8;
 }
 
 
@@ -517,18 +561,25 @@ body {
 .empty-gallery {
   grid-column: 1 / -1;
 
-  padding: 70px 20px;
+  padding: 80px 20px;
 
   text-align: center;
 
-  color: #718096;
+  color: #7a8495;
 }
 
-
 .empty-gallery h3 {
-  margin: 12px 0 6px;
+  margin-top: 12px;
 
-  color: #27344a;
+  margin-bottom: 5px;
+
+  color: #303b4d;
+
+  font-size: 19px;
+}
+
+.empty-gallery p {
+  font-size: 14px;
 }
 
 
@@ -549,35 +600,35 @@ body {
 
   justify-content: center;
 
-  padding: 30px;
+  padding: 25px;
 
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.92);
 }
 
-
 .viewer-media {
-  max-width: 95vw;
+  max-width: 94vw;
 
   max-height: 90vh;
+
+  width: auto;
+
+  height: auto;
 
   object-fit: contain;
 
   border-radius: 8px;
 }
 
-
 .viewer-close {
   position: absolute;
 
-  top: 20px;
+  top: 18px;
 
-  right: 25px;
+  right: 22px;
 
-  z-index: 10000;
+  width: 44px;
 
-  width: 45px;
-
-  height: 45px;
+  height: 44px;
 
   border: none;
 
@@ -587,16 +638,36 @@ body {
 
   color: white;
 
-  font-size: 32px;
+  font-size: 30px;
 
   line-height: 1;
 
   cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.viewer-close:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
 
-.viewer-close:hover {
-  background: rgba(255, 255, 255, 0.25);
+/* ==========================================
+   TABLET
+   ========================================== */
+
+@media (max-width: 850px) {
+
+  .gallery-grid {
+    grid-template-columns:
+      repeat(
+        auto-fill,
+        minmax(180px, 1fr)
+      );
+
+    gap: 14px;
+  }
+
 }
 
 
@@ -606,31 +677,45 @@ body {
 
 @media (max-width: 600px) {
 
-  .login-card {
-    padding: 30px 20px;
-  }
-
-
   .gallery-header {
-    padding-top: 20px;
+    width: 92%;
 
-    flex-direction: column;
+    padding-top: 20px;
 
     align-items: flex-start;
   }
 
-
   .gallery-header h1 {
-    font-size: 25px;
+    font-size: 23px;
+  }
+
+  .lock-button {
+    padding: 9px 11px;
+
+    font-size: 12px;
   }
 
 
-  .lock-button {
-    align-self: stretch;
+  .upload-section {
+    width: 92%;
+
+    padding: 14px;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    text-align: center;
+  }
+
+  .upload-button {
+    width: 100%;
   }
 
 
   .gallery-grid {
+    width: 92%;
+
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
 
@@ -638,28 +723,69 @@ body {
   }
 
 
+  .photo-card {
+    border-radius: 11px;
+  }
+
+
   .media-wrapper,
   .unsupported-file {
-    height: 170px;
+    aspect-ratio: 1 / 1;
   }
 
 
   .photo-card-info {
     padding: 8px;
 
-    display: block;
+    min-height: 48px;
   }
 
 
   .file-name {
-    display: block;
-
-    margin-bottom: 7px;
+    font-size: 10px;
   }
 
 
   .delete-button {
-    width: 100%;
+    padding: 5px 7px;
+
+    font-size: 9px;
+  }
+
+
+  .unsupported-file {
+    padding: 10px;
+  }
+
+  .unsupported-file > div:first-child {
+    font-size: 30px;
+  }
+
+  .unsupported-file strong {
+    font-size: 11px;
+  }
+
+  .unsupported-file a {
+    font-size: 10px;
+
+    padding: 6px 8px;
+  }
+
+}
+
+
+/* ==========================================
+   VERY SMALL PHONES
+   ========================================== */
+
+@media (max-width: 380px) {
+
+  .gallery-grid {
+    gap: 7px;
+  }
+
+  .gallery-header h1 {
+    font-size: 20px;
   }
 
 }
