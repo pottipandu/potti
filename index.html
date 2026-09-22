@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Private Gallery</title>
 
@@ -15,8 +18,9 @@
 
 <body>
 
-  <!-- LOGIN -->
-  <section id="loginScreen" class="login-screen">
+  <!-- ================= LOGIN PAGE ================= -->
+
+  <section id="loginScreen" class="screen login-screen">
 
     <div class="login-card">
 
@@ -24,22 +28,26 @@
 
       <h1>Private Gallery</h1>
 
-      <p class="login-subtitle">
+      <p class="subtitle">
         Enter your password to continue
       </p>
 
-      <form id="loginForm" onsubmit="event.preventDefault(); unlockGallery();">
+      <form
+        id="loginForm"
+        onsubmit="event.preventDefault(); unlockGallery();"
+      >
 
         <input
           id="pinInput"
           type="password"
-          placeholder="Enter password"
+          placeholder="Enter PIN"
           autocomplete="off"
           maxlength="100"
           spellcheck="false"
         >
 
         <button
+          id="unlockButton"
           type="submit"
           class="unlock-button"
         >
@@ -48,100 +56,104 @@
 
       </form>
 
-      <p id="message" class="message"></p>
+      <p id="loginMessage" class="message"></p>
 
     </div>
 
   </section>
 
 
-  <!-- GALLERY -->
-  <section id="galleryScreen" class="gallery-screen">
+  <!-- ================= GALLERY PAGE ================= -->
+
+  <section id="galleryScreen" class="screen gallery-screen hidden">
 
     <header class="gallery-header">
 
       <div>
-        <p class="small-label">PRIVATE</p>
+        <h1>My Private Gallery</h1>
 
-        <h1>My Gallery</h1>
-
-        <p class="gallery-subtitle">
-          Your private photo collection
+        <p>
+          Your photos are stored privately.
         </p>
       </div>
 
-      <div class="header-actions">
-
-        <label class="add-button">
-          + Add Photos
-
-          <input
-            id="photoInput"
-            type="file"
-            accept="image/*"
-            multiple
-            hidden
-          >
-        </label>
-
-        <button
-          id="lockButton"
-          class="lock-button"
-          type="button"
-        >
-          🔒 Lock
-        </button>
-
-      </div>
+      <button
+        class="lock-button"
+        onclick="lockGallery()"
+      >
+        🔒 Lock
+      </button>
 
     </header>
 
 
-    <!-- EMPTY STATE -->
-    <div id="emptyState" class="empty-state">
+    <main class="gallery-container">
 
-      <div class="empty-icon">🖼️</div>
+      <!-- Upload area -->
 
-      <h2>Your gallery is empty</h2>
+      <div class="upload-section">
 
-      <p>
-        Add your first photos to your private gallery.
-      </p>
-
-      <label class="empty-add-button">
-        + Add Photos
+        <label
+          for="photoInput"
+          class="upload-button"
+        >
+          ＋ Add Photos
+        </label>
 
         <input
-          id="emptyPhotoInput"
+          id="photoInput"
           type="file"
           accept="image/*"
           multiple
           hidden
         >
-      </label>
 
-    </div>
+        <p id="uploadMessage" class="message"></p>
+
+      </div>
 
 
-    <!-- PHOTOS -->
-    <main
-      id="galleryGrid"
-      class="gallery-grid"
-    ></main>
+      <!-- Empty gallery -->
+
+      <div
+        id="emptyGallery"
+        class="empty-gallery"
+      >
+
+        <div class="empty-icon">📷</div>
+
+        <h2>Your gallery is empty</h2>
+
+        <p>
+          Add your first photo to get started.
+        </p>
+
+      </div>
+
+
+      <!-- Photo grid -->
+
+      <div
+        id="photoGrid"
+        class="photo-grid"
+      ></div>
+
+    </main>
 
   </section>
 
 
-  <!-- PHOTO VIEWER -->
+  <!-- ================= PHOTO VIEWER ================= -->
+
   <div
     id="viewer"
-    class="viewer"
+    class="viewer hidden"
+    onclick="closeViewer()"
   >
 
     <button
-      id="viewerClose"
       class="viewer-close"
-      type="button"
+      onclick="closeViewer()"
     >
       ×
     </button>
@@ -149,15 +161,16 @@
     <img
       id="viewerImage"
       src=""
-      alt="Gallery photo"
+      alt="Photo"
+      onclick="event.stopPropagation()"
     >
 
   </div>
 
 
-  <!-- YOUR JAVASCRIPT -->
-  <script src="script.js"></script>
+  <!-- IMPORTANT:
+       Cache-busting version number -->
+  <script src="script.js?v=5"></script>
 
 </body>
 </html>
-```
