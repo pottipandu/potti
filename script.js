@@ -113,34 +113,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 
-  // ---------- CHECK EXISTING SESSION ----------
+ // ---------- ALWAYS LOCK ON PAGE LOAD / REFRESH ----------
 
-  try {
+try {
 
-    const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
+  // Clear any previous Supabase login session
+  await supabaseClient.auth.signOut();
 
-    if (session) {
+  // Always start with the PIN screen
+  showLogin();
 
-      await showGallery();
+} catch (error) {
 
-    } else {
+  console.error("Initial lock error:", error);
 
-      showLogin();
+  showLogin();
 
-    }
-
-  } catch (error) {
-
-    console.error("Session check error:", error);
-
-    showLogin();
-
-  }
-
-});
-
+}
 
 // ==========================================
 // SHOW LOGIN
