@@ -2,26 +2,43 @@
 // PRIVATE GALLERY - COMPLETE SCRIPT
 // ==========================================
 
+
 // ---------- SUPABASE CONFIG ----------
 
-const SUPABASE_URL = "https://wfhyyzoxknvdpfyxxmbp.supabase.co";
+const SUPABASE_URL =
+  "https://wfhyyzoxknvdpfyxxmbp.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_1uO-Uv8FdiI3ol2gXZlOrQ_WnRSt1x0";
 
-const GALLERY_EMAIL = "taara510p@gmail.com";
+const GALLERY_EMAIL =
+  "taara510p@gmail.com";
 
-const BUCKET_NAME = "private-gallery";
+const BUCKET_NAME =
+  "private-gallery";
 
 const SIGNED_URL_SECONDS = 3600;
 
 
 // ---------- SUPABASE CLIENT ----------
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth: {
+        // Do NOT remember login after refresh
+        persistSession: false,
+
+        // Keep token refreshing while the page is open
+        autoRefreshToken: true,
+
+        // No URL-based login
+        detectSessionInUrl: false
+      }
+    }
+  );
 
 
 // ---------- GLOBAL VARIABLES ----------
@@ -43,93 +60,124 @@ let viewer;
 // PAGE LOAD
 // ==========================================
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
 
-  // ---------- GET ELEMENTS ----------
+    // ---------- GET ELEMENTS ----------
 
-  pinInput = document.getElementById("pinInput");
-  pinButton = document.getElementById("pinButton");
+    pinInput =
+      document.getElementById("pinInput");
 
-  loginScreen = document.getElementById("loginScreen");
-  galleryScreen = document.getElementById("galleryScreen");
+    pinButton =
+      document.getElementById("pinButton");
 
-  loginMessage = document.getElementById("loginMessage");
-  uploadMessage = document.getElementById("uploadMessage");
+    loginScreen =
+      document.getElementById("loginScreen");
 
-  photoInput = document.getElementById("photoInput");
-  galleryGrid = document.getElementById("galleryGrid");
+    galleryScreen =
+      document.getElementById("galleryScreen");
 
-  viewer = document.getElementById("viewer");
+    loginMessage =
+      document.getElementById("loginMessage");
 
+    uploadMessage =
+      document.getElementById("uploadMessage");
 
-  // ---------- PIN INPUT ----------
+    photoInput =
+      document.getElementById("photoInput");
 
-  if (pinInput) {
+    galleryGrid =
+      document.getElementById("galleryGrid");
 
-    pinInput.addEventListener("input", () => {
-      enteredPin = pinInput.value.trim();
-    });
-
-    pinInput.addEventListener("keydown", (event) => {
-
-      if (event.key === "Enter") {
-        event.preventDefault();
-        unlockGallery();
-      }
-
-    });
-
-  }
+    viewer =
+      document.getElementById("viewer");
 
 
-  // ---------- PIN BUTTON ----------
+    // ---------- PIN INPUT ----------
 
-  if (pinButton) {
+    if (pinInput) {
 
-    pinButton.addEventListener("click", () => {
-      unlockGallery();
-    });
+      pinInput.addEventListener(
+        "input",
+        () => {
 
-  }
+          enteredPin =
+            pinInput.value.trim();
 
-
-  // ---------- PHOTO UPLOAD ----------
-
-  if (photoInput) {
-
-    photoInput.addEventListener("change", handlePhotoUpload);
-
-  }
+        }
+      );
 
 
-  // ---------- ESCAPE KEY ----------
+      pinInput.addEventListener(
+        "keydown",
+        (event) => {
 
-  document.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
 
-    if (event.key === "Escape") {
-      closeViewer();
+            event.preventDefault();
+
+            unlockGallery();
+
+          }
+
+        }
+      );
+
     }
 
-  });
+
+    // ---------- PIN BUTTON ----------
+
+    if (pinButton) {
+
+      pinButton.addEventListener(
+        "click",
+        () => {
+
+          unlockGallery();
+
+        }
+      );
+
+    }
 
 
- // ---------- ALWAYS LOCK ON PAGE LOAD / REFRESH ----------
+    // ---------- PHOTO UPLOAD ----------
 
-try {
+    if (photoInput) {
 
-  // Clear any previous Supabase login session
-  await supabaseClient.auth.signOut();
+      photoInput.addEventListener(
+        "change",
+        handlePhotoUpload
+      );
 
-  // Always start with the PIN screen
-  showLogin();
+    }
 
-} catch (error) {
 
-  console.error("Initial lock error:", error);
+    // ---------- ESCAPE KEY ----------
 
-  showLogin();
+    document.addEventListener(
+      "keydown",
+      (event) => {
 
-}
+        if (event.key === "Escape") {
+
+          closeViewer();
+
+        }
+
+      }
+    );
+
+
+    // ---------- ALWAYS START LOCKED ----------
+
+    showLogin();
+
+  }
+);
+
 
 // ==========================================
 // SHOW LOGIN
@@ -138,15 +186,26 @@ try {
 function showLogin() {
 
   if (loginScreen) {
-    loginScreen.style.display = "flex";
+
+    loginScreen.style.display =
+      "flex";
+
   }
+
 
   if (galleryScreen) {
-    galleryScreen.style.display = "none";
+
+    galleryScreen.style.display =
+      "none";
+
   }
 
+
   if (loginMessage) {
-    loginMessage.textContent = "";
+
+    loginMessage.textContent =
+      "";
+
   }
 
 }
@@ -159,12 +218,20 @@ function showLogin() {
 async function showGallery() {
 
   if (loginScreen) {
-    loginScreen.style.display = "none";
+
+    loginScreen.style.display =
+      "none";
+
   }
 
+
   if (galleryScreen) {
-    galleryScreen.style.display = "block";
+
+    galleryScreen.style.display =
+      "block";
+
   }
+
 
   await loadPhotos();
 
@@ -177,11 +244,18 @@ async function showGallery() {
 
 async function unlockGallery() {
 
-  const pin = pinInput ? pinInput.value.trim() : enteredPin;
+  const pin =
+    pinInput
+      ? pinInput.value.trim()
+      : enteredPin;
+
 
   if (!pin) {
 
-    showMessage("Please enter your PIN.", true);
+    showMessage(
+      "Please enter your PIN.",
+      true
+    );
 
     return;
 
@@ -193,30 +267,48 @@ async function unlockGallery() {
 
   try {
 
-    const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithPassword({
 
-        email: GALLERY_EMAIL,
+          email:
+            GALLERY_EMAIL,
 
-        password: pin
+          password:
+            pin
 
-      });
+        });
 
 
     if (error) {
 
-      console.error("Login error:", error);
+      console.error(
+        "Login error:",
+        error
+      );
 
-      showMessage("Incorrect PIN.", true);
+      showMessage(
+        "Incorrect PIN.",
+        true
+      );
 
       return;
 
     }
 
 
-    if (!data || !data.session) {
+    if (
+      !data ||
+      !data.session
+    ) {
 
-      showMessage("Unable to unlock gallery.", true);
+      showMessage(
+        "Unable to unlock gallery.",
+        true
+      );
 
       return;
 
@@ -225,21 +317,32 @@ async function unlockGallery() {
 
     enteredPin = "";
 
+
     if (pinInput) {
-      pinInput.value = "";
+
+      pinInput.value =
+        "";
+
     }
 
 
     showMessage("");
+
 
     await showGallery();
 
 
   } catch (error) {
 
-    console.error("Unlock error:", error);
+    console.error(
+      "Unlock error:",
+      error
+    );
 
-    showMessage("Something went wrong.", true);
+    showMessage(
+      "Something went wrong.",
+      true
+    );
 
   }
 
@@ -250,16 +353,30 @@ async function unlockGallery() {
 // LOGIN MESSAGE
 // ==========================================
 
-function showMessage(message, isError = false) {
+function showMessage(
+  message,
+  isError = false
+) {
 
   if (!loginMessage) return;
 
-  loginMessage.textContent = message;
+
+  loginMessage.textContent =
+    message;
+
 
   if (isError) {
-    loginMessage.classList.add("error");
+
+    loginMessage.classList.add(
+      "error"
+    );
+
   } else {
-    loginMessage.classList.remove("error");
+
+    loginMessage.classList.remove(
+      "error"
+    );
+
   }
 
 }
@@ -269,16 +386,30 @@ function showMessage(message, isError = false) {
 // UPLOAD MESSAGE
 // ==========================================
 
-function showUploadMessage(message, isError = false) {
+function showUploadMessage(
+  message,
+  isError = false
+) {
 
   if (!uploadMessage) return;
 
-  uploadMessage.textContent = message;
+
+  uploadMessage.textContent =
+    message;
+
 
   if (isError) {
-    uploadMessage.classList.add("error");
+
+    uploadMessage.classList.add(
+      "error"
+    );
+
   } else {
-    uploadMessage.classList.remove("error");
+
+    uploadMessage.classList.remove(
+      "error"
+    );
+
   }
 
 }
@@ -293,7 +424,8 @@ async function loadPhotos() {
   if (!galleryGrid) return;
 
 
-  galleryGrid.innerHTML = "";
+  galleryGrid.innerHTML =
+    "";
 
   showUploadMessage("");
 
@@ -301,8 +433,12 @@ async function loadPhotos() {
   try {
 
     const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth
+        .getSession();
 
 
     if (!session) {
@@ -314,18 +450,28 @@ async function loadPhotos() {
     }
 
 
-    const { data: photos, error } = await supabaseClient
-
-      .from("photos")
-
-      .select("*")
-
-      .order("created_at", { ascending: false });
+    const {
+      data: photos,
+      error
+    } =
+      await supabaseClient
+        .from("photos")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
 
 
     if (error) {
 
-      console.error("Database error:", error);
+      console.error(
+        "Database error:",
+        error
+      );
+
 
       galleryGrid.innerHTML = `
         <div class="empty-gallery">
@@ -338,7 +484,10 @@ async function loadPhotos() {
     }
 
 
-    if (!photos || photos.length === 0) {
+    if (
+      !photos ||
+      photos.length === 0
+    ) {
 
       showEmptyGallery();
 
@@ -347,16 +496,24 @@ async function loadPhotos() {
     }
 
 
-    for (const photo of photos) {
+    for (
+      const photo of photos
+    ) {
 
-      await createPhotoCard(photo);
+      await createPhotoCard(
+        photo
+      );
 
     }
 
 
   } catch (error) {
 
-    console.error("Load photos error:", error);
+    console.error(
+      "Load photos error:",
+      error
+    );
+
 
     galleryGrid.innerHTML = `
       <div class="empty-gallery">
@@ -377,11 +534,22 @@ function showEmptyGallery() {
 
   if (!galleryGrid) return;
 
+
   galleryGrid.innerHTML = `
     <div class="empty-gallery">
-      <div style="font-size:50px;">📷</div>
-      <h3>Your gallery is empty</h3>
-      <p>Add your first photo or video.</p>
+
+      <div style="font-size:50px;">
+        📷
+      </div>
+
+      <h3>
+        Your gallery is empty
+      </h3>
+
+      <p>
+        Add your first photo or video.
+      </p>
+
     </div>
   `;
 
@@ -392,30 +560,44 @@ function showEmptyGallery() {
 // CREATE PHOTO / VIDEO CARD
 // ==========================================
 
-async function createPhotoCard(photo) {
+async function createPhotoCard(
+  photo
+) {
 
   try {
 
-    const { data, error } = await supabaseClient.storage
-      .from(BUCKET_NAME)
-      .createSignedUrl(
-        photo.storage_path,
-        SIGNED_URL_SECONDS
-      );
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.storage
+        .from(BUCKET_NAME)
+        .createSignedUrl(
+          photo.storage_path,
+          SIGNED_URL_SECONDS
+        );
 
 
     if (error) {
 
-      console.error("Signed URL error:", error);
+      console.error(
+        "Signed URL error:",
+        error
+      );
 
       return;
 
     }
 
 
-    const fileUrl = data.signedUrl;
+    const fileUrl =
+      data.signedUrl;
 
-    const fileName = photo.file_name || "File";
+
+    const fileName =
+      photo.file_name ||
+      "File";
+
 
     const extension =
       fileName
@@ -445,16 +627,25 @@ async function createPhotoCard(photo) {
     ];
 
 
-    const card = document.createElement("div");
+    const card =
+      document.createElement(
+        "div"
+      );
 
-    card.className = "photo-card";
+
+    card.className =
+      "photo-card";
 
 
     // ======================================
     // IMAGE
     // ======================================
 
-    if (imageExtensions.includes(extension)) {
+    if (
+      imageExtensions.includes(
+        extension
+      )
+    ) {
 
       card.innerHTML = `
 
@@ -486,15 +677,23 @@ async function createPhotoCard(photo) {
       `;
 
 
-      const image = card.querySelector("img");
+      const image =
+        card.querySelector("img");
+
 
       if (image) {
 
-        image.addEventListener("click", () => {
+        image.addEventListener(
+          "click",
+          () => {
 
-          openViewer(fileUrl, "image");
+            openViewer(
+              fileUrl,
+              "image"
+            );
 
-        });
+          }
+        );
 
       }
 
@@ -505,7 +704,11 @@ async function createPhotoCard(photo) {
     // VIDEO
     // ======================================
 
-    else if (videoExtensions.includes(extension)) {
+    else if (
+      videoExtensions.includes(
+        extension
+      )
+    ) {
 
       card.innerHTML = `
 
@@ -537,15 +740,23 @@ async function createPhotoCard(photo) {
       `;
 
 
-      const video = card.querySelector("video");
+      const video =
+        card.querySelector("video");
+
 
       if (video) {
 
-        video.addEventListener("dblclick", () => {
+        video.addEventListener(
+          "dblclick",
+          () => {
 
-          openViewer(fileUrl, "video");
+            openViewer(
+              fileUrl,
+              "video"
+            );
 
-        });
+          }
+        );
 
       }
 
@@ -556,7 +767,11 @@ async function createPhotoCard(photo) {
     // HEIC / HEIF
     // ======================================
 
-    else if (heicExtensions.includes(extension)) {
+    else if (
+      heicExtensions.includes(
+        extension
+      )
+    ) {
 
       card.innerHTML = `
 
@@ -564,7 +779,9 @@ async function createPhotoCard(photo) {
 
           <div>📷</div>
 
-          <strong>HEIC Photo</strong>
+          <strong>
+            HEIC Photo
+          </strong>
 
           <span>
             ${escapeHtml(fileName)}
@@ -612,7 +829,9 @@ async function createPhotoCard(photo) {
 
           <div>📁</div>
 
-          <strong>File</strong>
+          <strong>
+            File
+          </strong>
 
           <span>
             ${escapeHtml(fileName)}
@@ -653,28 +872,40 @@ async function createPhotoCard(photo) {
     // ======================================
 
     const deleteButton =
-      card.querySelector(".delete-button");
+      card.querySelector(
+        ".delete-button"
+      );
 
 
     if (deleteButton) {
 
-      deleteButton.addEventListener("click", async (event) => {
+      deleteButton.addEventListener(
+        "click",
+        async (event) => {
 
-        event.stopPropagation();
+          event.stopPropagation();
 
-        await deletePhoto(photo);
+          await deletePhoto(
+            photo
+          );
 
-      });
+        }
+      );
 
     }
 
 
-    galleryGrid.appendChild(card);
+    galleryGrid.appendChild(
+      card
+    );
 
 
   } catch (error) {
 
-    console.error("Create card error:", error);
+    console.error(
+      "Create card error:",
+      error
+    );
 
   }
 
@@ -685,24 +916,38 @@ async function createPhotoCard(photo) {
 // HANDLE PHOTO / VIDEO UPLOAD
 // ==========================================
 
-async function handlePhotoUpload(event) {
+async function handlePhotoUpload(
+  event
+) {
 
-  const files = event.target.files;
+  const files =
+    event.target.files;
 
 
-  if (!files || files.length === 0) {
+  if (
+    !files ||
+    files.length === 0
+  ) {
+
     return;
+
   }
 
 
-  showUploadMessage("Uploading...");
+  showUploadMessage(
+    "Uploading..."
+  );
 
 
   try {
 
-    for (const file of files) {
+    for (
+      const file of files
+    ) {
 
-      await uploadPhoto(file);
+      await uploadPhoto(
+        file
+      );
 
     }
 
@@ -714,7 +959,8 @@ async function handlePhotoUpload(event) {
     );
 
 
-    event.target.value = "";
+    event.target.value =
+      "";
 
 
     await loadPhotos();
@@ -722,10 +968,15 @@ async function handlePhotoUpload(event) {
 
   } catch (error) {
 
-    console.error("Upload error:", error);
+    console.error(
+      "Upload error:",
+      error
+    );
+
 
     showUploadMessage(
-      error.message || "Upload failed.",
+      error.message ||
+        "Upload failed.",
       true
     );
 
@@ -738,18 +989,26 @@ async function handlePhotoUpload(event) {
 // UPLOAD PHOTO / VIDEO
 // ==========================================
 
-async function uploadPhoto(file) {
+async function uploadPhoto(
+  file
+) {
 
   // ---------- CHECK SESSION ----------
 
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
+    data: {
+      session
+    }
+  } =
+    await supabaseClient.auth
+      .getSession();
 
 
   if (!session) {
 
-    throw new Error("You are not logged in.");
+    throw new Error(
+      "You are not logged in."
+    );
 
   }
 
@@ -758,7 +1017,9 @@ async function uploadPhoto(file) {
 
   if (!file) {
 
-    throw new Error("No file selected.");
+    throw new Error(
+      "No file selected."
+    );
 
   }
 
@@ -789,7 +1050,11 @@ async function uploadPhoto(file) {
       .toLowerCase();
 
 
-  if (!allowedExtensions.includes(extension)) {
+  if (
+    !allowedExtensions.includes(
+      extension
+    )
+  ) {
 
     throw new Error(
       `File type .${extension} is not supported.`
@@ -800,7 +1065,9 @@ async function uploadPhoto(file) {
 
   // ---------- CREATE SAFE FILE NAME ----------
 
-  const timestamp = Date.now();
+  const timestamp =
+    Date.now();
+
 
   const random =
     Math.random()
@@ -823,19 +1090,19 @@ async function uploadPhoto(file) {
 
   const {
     error: uploadError
-  } = await supabaseClient.storage
-
-    .from(BUCKET_NAME)
-
-    .upload(
-      storagePath,
-      file,
-      {
-        cacheControl: "3600",
-        upsert: false,
-        contentType: file.type || undefined
-      }
-    );
+  } =
+    await supabaseClient.storage
+      .from(BUCKET_NAME)
+      .upload(
+        storagePath,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false,
+          contentType:
+            file.type || undefined
+        }
+      );
 
 
   if (uploadError) {
@@ -854,19 +1121,21 @@ async function uploadPhoto(file) {
 
   const {
     error: databaseError
-  } = await supabaseClient
+  } =
+    await supabaseClient
+      .from("photos")
+      .insert({
 
-    .from("photos")
+        file_name:
+          file.name,
 
-    .insert({
+        storage_path:
+          storagePath,
 
-      file_name: file.name,
+        caption:
+          ""
 
-      storage_path: storagePath,
-
-      caption: ""
-
-    });
+      });
 
 
   // ---------- DELETE STORAGE FILE IF DB FAILED ----------
@@ -880,10 +1149,10 @@ async function uploadPhoto(file) {
 
 
     await supabaseClient.storage
-
       .from(BUCKET_NAME)
-
-      .remove([storagePath]);
+      .remove([
+        storagePath
+      ]);
 
 
     throw databaseError;
@@ -897,7 +1166,9 @@ async function uploadPhoto(file) {
 // DELETE PHOTO
 // ==========================================
 
-async function deletePhoto(photo) {
+async function deletePhoto(
+  photo
+) {
 
   const confirmed =
     confirm(
@@ -906,7 +1177,9 @@ async function deletePhoto(photo) {
 
 
   if (!confirmed) {
+
     return;
+
   }
 
 
@@ -916,13 +1189,12 @@ async function deletePhoto(photo) {
 
     const {
       error: storageError
-    } = await supabaseClient.storage
-
-      .from(BUCKET_NAME)
-
-      .remove([
-        photo.storage_path
-      ]);
+    } =
+      await supabaseClient.storage
+        .from(BUCKET_NAME)
+        .remove([
+          photo.storage_path
+        ]);
 
 
     if (storageError) {
@@ -941,13 +1213,14 @@ async function deletePhoto(photo) {
 
     const {
       error: databaseError
-    } = await supabaseClient
-
-      .from("photos")
-
-      .delete()
-
-      .eq("id", photo.id);
+    } =
+      await supabaseClient
+        .from("photos")
+        .delete()
+        .eq(
+          "id",
+          photo.id
+        );
 
 
     if (databaseError) {
@@ -972,7 +1245,9 @@ async function deletePhoto(photo) {
       error
     );
 
-    alert("Unable to delete this file.");
+    alert(
+      "Unable to delete this file."
+    );
 
   }
 
@@ -983,25 +1258,36 @@ async function deletePhoto(photo) {
 // OPEN VIEWER
 // ==========================================
 
-function openViewer(fileUrl, type = "image") {
+function openViewer(
+  fileUrl,
+  type = "image"
+) {
 
   if (!viewer) return;
 
 
-  viewer.innerHTML = "";
+  viewer.innerHTML =
+    "";
 
 
   // ---------- CLOSE BUTTON ----------
 
   const closeButton =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
+
 
   closeButton.className =
     "viewer-close";
 
-  closeButton.type = "button";
 
-  closeButton.textContent = "×";
+  closeButton.type =
+    "button";
+
+
+  closeButton.textContent =
+    "×";
 
 
   closeButton.addEventListener(
@@ -1010,7 +1296,9 @@ function openViewer(fileUrl, type = "image") {
   );
 
 
-  viewer.appendChild(closeButton);
+  viewer.appendChild(
+    closeButton
+  );
 
 
   // ---------- IMAGE ----------
@@ -1018,46 +1306,73 @@ function openViewer(fileUrl, type = "image") {
   if (type === "image") {
 
     const image =
-      document.createElement("img");
-
-    image.src = fileUrl;
-
-    image.className = "viewer-media";
-
-    image.alt = "Gallery image";
+      document.createElement(
+        "img"
+      );
 
 
-    viewer.appendChild(image);
+    image.src =
+      fileUrl;
+
+
+    image.className =
+      "viewer-media";
+
+
+    image.alt =
+      "Gallery image";
+
+
+    viewer.appendChild(
+      image
+    );
 
   }
 
 
   // ---------- VIDEO ----------
 
-  else if (type === "video") {
+  else if (
+    type === "video"
+  ) {
 
     const video =
-      document.createElement("video");
-
-    video.src = fileUrl;
-
-    video.className = "viewer-media";
-
-    video.controls = true;
-
-    video.autoplay = true;
-
-    video.playsInline = true;
+      document.createElement(
+        "video"
+      );
 
 
-    viewer.appendChild(video);
+    video.src =
+      fileUrl;
+
+
+    video.className =
+      "viewer-media";
+
+
+    video.controls =
+      true;
+
+
+    video.autoplay =
+      true;
+
+
+    video.playsInline =
+      true;
+
+
+    viewer.appendChild(
+      video
+    );
 
   }
 
 
   // ---------- SHOW VIEWER ----------
 
-  viewer.style.display = "flex";
+  viewer.style.display =
+    "flex";
 
 }
 
@@ -1071,10 +1386,12 @@ function closeViewer() {
   if (!viewer) return;
 
 
-  viewer.style.display = "none";
+  viewer.style.display =
+    "none";
 
 
-  viewer.innerHTML = "";
+  viewer.innerHTML =
+    "";
 
 }
 
@@ -1087,7 +1404,8 @@ async function lockGallery() {
 
   try {
 
-    await supabaseClient.auth.signOut();
+    await supabaseClient.auth
+      .signOut();
 
   } catch (error) {
 
@@ -1100,38 +1418,69 @@ async function lockGallery() {
 
 
   if (galleryScreen) {
-    galleryScreen.style.display = "none";
+
+    galleryScreen.style.display =
+      "none";
+
   }
 
 
   if (loginScreen) {
-    loginScreen.style.display = "flex";
+
+    loginScreen.style.display =
+      "flex";
+
   }
 
 
   if (pinInput) {
-    pinInput.value = "";
+
+    pinInput.value =
+      "";
+
   }
 
 
-  enteredPin = "";
+  enteredPin =
+    "";
 
+
+  closeViewer();
 
   showMessage("");
 
 }
 
+
 // ==========================================
-// AUTO LOCK WHEN LEAVING / HIDING THE SITE
+// AUTO LOCK WHEN PAGE IS HIDDEN
 // ==========================================
 
-document.addEventListener("visibilitychange", () => {
+document.addEventListener(
+  "visibilitychange",
+  () => {
 
-  if (document.visibilityState === "hidden") {
-    lockGallery();
+    if (
+      document.visibilityState ===
+      "hidden"
+    ) {
+
+      // Only lock if gallery is currently open
+      if (
+        galleryScreen &&
+        galleryScreen.style.display !==
+          "none"
+      ) {
+
+        lockGallery();
+
+      }
+
+    }
+
   }
+);
 
-});
 
 // ==========================================
 // ESCAPE HTML
@@ -1139,21 +1488,41 @@ document.addEventListener("visibilitychange", () => {
 
 function escapeHtml(value) {
 
-  if (value === null || value === undefined) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
     return "";
+
   }
 
 
   return String(value)
 
-    .replace(/&/g, "&amp;")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-    .replace(/</g, "&lt;")
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-    .replace(/>/g, "&gt;")
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-    .replace(/"/g, "&quot;")
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-    .replace(/'/g, "&#039;");
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
