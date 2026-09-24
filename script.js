@@ -1132,6 +1132,17 @@ async function lockGallery() {
 
 }
 
+// ==========================================
+// AUTO LOCK WHEN LEAVING / HIDING THE SITE
+// ==========================================
+
+document.addEventListener("visibilitychange", () => {
+
+  if (document.visibilityState === "hidden") {
+    lockGallery();
+  }
+
+});
 
 // ==========================================
 // ESCAPE HTML
